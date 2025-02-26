@@ -1,3 +1,5 @@
+using FluentAssertions;
+
 namespace DatesAndStuff.Tests;
 
 [TestFixture]
@@ -32,13 +34,31 @@ public class SimulationTimeTests
         // Default time is not current time.
         public void SimulationTime_DefaultTime_IsNotCurrentTime()
         {
-            throw new NotImplementedException();
+            // Arrange
+            SimulationTime defaultTime = new SimulationTime();
+            DateTime now = DateTime.Now;
+
+            // Act
+            DateTime simulationDateTime = defaultTime.ToAbsoluteDateTime();
+
+            // Assert
+            simulationDateTime.Should().NotBeCloseTo(now, TimeSpan.FromSeconds(5),
+                "The default SimulationTime should not be equal to the current real-world time.");
         }
         
         [Test]
         public void ToString_ShouldReturnCorrectFormat()
         {
-            throw new NotImplementedException();
+            // Arrange
+            var simulationTime = new SimulationTime(2025, 1, 1, 1, 0, 0);
+            string expectedFormat = simulationTime.ToAbsoluteDateTime().ToString("yyyy-MM-ddTHH:mm:ss");
+
+            // Act
+            string actualString = simulationTime.ToString();
+
+            // Assert
+            actualString.Should().Be(expectedFormat, 
+                $"SimulationTime.ToString() should return the correct format, but was '{actualString}'.");
         }
     }
     
@@ -58,28 +78,28 @@ public class SimulationTimeTests
         // min
         public void GivenTwoEqualSimulationTimes_WhenCompared_ThenTheyShouldBeEqual()
         {
+            // Arrange
             var time1 = new SimulationTime(2024, 2, 26, 10, 0, 0);
             var time2 = new SimulationTime(2024, 2, 26, 10, 0, 0);
-
-            Assert.AreEqual(time1, time2, "The two SimulationTime instances should be equal.");
-            Assert.IsTrue(time1 == time2, "'==' operator should return true for equal values.");
-            Assert.IsFalse(time1 != time2, "'!=' operator should return false for equal values.");
+            
+            // Assert
+            time1.Should().Be(time2, "The two SimulationTime instances should be equal.");
         }
 
         [Test]
         public void GivenTwoDifferentSimulationTimes_WhenCompared_ThenTheyShouldNotBeEqual()
         {
+            // Arrange
             var time1 = new SimulationTime(2024, 2, 26, 10, 0, 0);
             var time2 = new SimulationTime(2024, 2, 26, 10, 0, 1);
-
-            Assert.AreNotEqual(time1, time2, "The two SimulationTime instances should be different.");
-            Assert.IsFalse(time1 == time2, "'==' operator should return false for different values.");
-            Assert.IsTrue(time1 != time2, "'!=' operator should return true for different values.");
+            
+            // Assert
+            time1.Should().NotBe(time2, "The two SimulationTime instances should be different.");
         }
     }
 
     [TestFixture]
-    private class TimeSpanArithmeticTests
+    public class TimeSpanArithmeticTests
     {
 
         [Test]
@@ -103,16 +123,26 @@ public class SimulationTimeTests
 
             // Assert
             var expectedDateTime = baseDate + ts;
-            Assert.AreEqual(expectedDateTime, result.ToAbsoluteDateTime());
+            expectedDateTime.Should().Be(result.ToAbsoluteDateTime(), "Adding a TimeSpan should correctly shift the SimulationTime.");
         }
 
         [Test]
         //Method_Should_Then
         public void GivenSimulationTime_WhenSubtracted_ThenTimeIsShiftedBack()
         {
-            // code kozelibb
-            // RegisterOrder_SignedInUserSendsOrder_OrderIsRegistered
-            throw new NotImplementedException();
+            // Arrange
+            DateTime baseDate = new DateTime(2024, 2, 26, 10, 0, 0);
+            SimulationTime sut = new SimulationTime(baseDate);
+    
+            TimeSpan ts = TimeSpan.FromMilliseconds(5000);
+
+            // Act
+            SimulationTime result = sut - ts;
+
+            // Assert
+            DateTime expectedDateTime = baseDate - ts;
+            expectedDateTime.Should().Be(result.ToAbsoluteDateTime(), 
+                "Subtracting a TimeSpan should correctly shift the SimulationTime backwards.");
         }
     }
 
@@ -123,10 +153,14 @@ public class SimulationTimeTests
         // simulation difference timespane and datetimetimespan is the same
         public void GivenSimulationTime_WhenMillisecondsAreAdded_ThenTimeIncreases()
         {
+            // Arrange
             var baseTime = new SimulationTime(2025, 1, 1, 0, 0, 0);
+            
+            // Act
             var updatedTime = baseTime.AddMilliseconds(1000);
             
-            Assert.AreNotEqual(baseTime, updatedTime, "Adding milliseconds should change the SimulationTime.");
+            // Assert
+            baseTime.Should().NotBe(updatedTime, "Adding milliseconds should change the SimulationTime.");
         }
         
         [Test]
@@ -141,7 +175,7 @@ public class SimulationTimeTests
             var actualTime = SimulationTime.MinValue + TimeSpan.FromMilliseconds(10);
 
             // Assert
-            Assert.AreEqual(expectedTime, actualTime, "Adding 10 milliseconds should correctly update the SimulationTime.");
+            expectedTime.Should().Be(actualTime, "Adding 10 milliseconds should correctly update the SimulationTime.");
         }
         
         [Test]
@@ -155,7 +189,8 @@ public class SimulationTimeTests
             var nextMiliseconds = time.NextMillisec;
 
             // Assert
-            Assert.That(nextMiliseconds.TotalMilliseconds, Is.EqualTo(time.TotalMilliseconds + 1));
+            nextMiliseconds.TotalMilliseconds.Should().Be(time.TotalMilliseconds + 1,
+                "NextMillisec should increase the total milliseconds by exactly 1.");
         }
         
         [Test]
@@ -170,28 +205,40 @@ public class SimulationTimeTests
             var actualTime = baseTime + TimeSpan.FromMilliseconds(500);
 
             // Assert
-            Assert.That(actualTime, Is.EqualTo(expectedTime));
+            actualTime.Should().Be(expectedTime);
         }
         
         [Test]
         // the same as before just with seconds
         public void GivenSimulationTime_WhenSecondsAdded_ThenTimeUpdatesCorrectly()
         {
-            throw new NotImplementedException();
+            // Arrange
+            var baseTime = new SimulationTime(2025, 1, 1, 1, 0, 0); // Initial time
+            var expectedTime = baseTime.AddSeconds(30); // Expected time after adding 30 seconds
+
+            // Act
+            var actualTime = baseTime + TimeSpan.FromSeconds(30); // Add 30 seconds to baseTime
+
+            // Assert
+            actualTime.Should().Be(expectedTime, 
+                "Adding seconds to SimulationTime should correctly update the time.");
         }
         
         [Test]
         // same as before just with timespan
         public void SimulationTime_AddTimeSpan()
         {
-            throw new NotImplementedException();
-        }
-        
-        [Test]
-        // check string representation given by ToString
-        public void GivenSimulationTime_WhenToStringCalled_ThenReturnsCorrectFormat()
-        {
-            throw new NotImplementedException();
+            // Arrange
+            var baseTime = new SimulationTime(2025, 1, 1, 1, 0, 0);
+            var timeSpan = TimeSpan.FromMinutes(15);
+            var expectedTime = baseTime.AddTimeSpan(timeSpan);
+
+            // Act
+            var actualTime = baseTime + timeSpan;
+
+            // Assert
+            actualTime.Should().Be(expectedTime, 
+                "Adding a TimeSpan to SimulationTime should correctly update the time.");
         }
     }
 }
