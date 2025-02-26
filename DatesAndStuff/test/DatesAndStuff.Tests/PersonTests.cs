@@ -2,6 +2,7 @@
 
 namespace DatesAndStuff.Tests;
 
+[TestFixture]
 public class PersonTests
 {
     Person sut;
@@ -11,66 +12,88 @@ public class PersonTests
     {
         this.sut = new Person("Test Pista", 54);
     }
-
-    [Test]
-    public void GotMerried_First_NameShouldChange()
+    
+    [TestFixture]
+    public class MarrigeTests
     {
-        // Arrange
-        string newName = "Test-Eleso Pista";
-        double salaryBeforeMarriage = sut.Salary;
-        var beforeChanges = Person.Clone(sut);
+        private Person sut;
 
-        // Act
-        sut.GotMarried(newName);
+        public MarrigeTests()
+        {
+            this.sut = new Person("Test Pista", 54);
+        }
 
-        // Assert
-        Assert.That(sut.Name, Is.EqualTo(newName)); // act = exp
+        [Test]
+        public void GotMerried_First_NameShouldChange()
+        {
+            // Arrange
+            string newName = "Test-Eleso Pista";
+            double salaryBeforeMarriage = sut.Salary;
+            var beforeChanges = Person.Clone(sut);
 
-        sut.Name.Should().Be(newName);
-        sut.Should().BeEquivalentTo(beforeChanges, o => o.Excluding(p => p.Name));
+            // Act
+            sut.GotMarried(newName);
 
-        //sut.Salary.Should().Be(salaryBeforeMarriage);
+            // Assert
+            Assert.That(sut.Name, Is.EqualTo(newName)); // act = exp
 
-        //Assert.AreEqual(newName, sut.Name); // = (exp, act)
-        //Assert.AreEqual(salaryBeforeMarriage, sut.Salary);
+            sut.Name.Should().Be(newName);
+            sut.Should().BeEquivalentTo(beforeChanges, o => o.Excluding(p => p.Name));
+
+            //sut.Salary.Should().Be(salaryBeforeMarriage);
+
+            //Assert.AreEqual(newName, sut.Name); // = (exp, act)
+            //Assert.AreEqual(salaryBeforeMarriage, sut.Salary);
+        }
+
+        [Test]
+        public void GotMerried_Second_ShouldFail()
+        {
+            // Arrange
+            string newName = "Test-Eleso-Felallo Pista";
+            sut.GotMarried("");
+
+            // Act
+            var task = Task.Run(() => sut.GotMarried(""));
+            try { task.Wait(); } catch { }
+
+            // Assert
+            Assert.IsTrue(task.IsFaulted);
+        }   
     }
 
-    [Test]
-    public void GotMerried_Second_ShouldFail()
+    [TestFixture]
+    public class SalaryTests
     {
-        // Arrange
-        string newName = "Test-Eleso-Felallo Pista";
-        sut.GotMarried("");
+        private Person sut;
 
-        // Act
-        var task = Task.Run(() => sut.GotMarried(""));
-        try { task.Wait(); } catch { }
+        public SalaryTests()
+        {
+            this.sut = new Person("Test Pista", 54);
+        }
+        
+        [Test]
+        public void PositiveIncrease_ShouldIncreaseSalary()
+        {
+            throw new NotImplementedException();
+        }
 
-        // Assert
-        Assert.IsTrue(task.IsFaulted);
-    }
+        [Test]
+        public void ZeroPercentIncrease_ShouldNotChangeSalary()
+        {
+            throw new NotImplementedException();
+        }
 
-    [Test]
-    public void IncreaseSalary_PositiveIncrease_ShouldIncrease()
-    {
-        throw new NotImplementedException();
-    }
+        [Test]
+        public void NegativeIncrease_ShouldDecreaseSalary()
+        {
+            throw new NotImplementedException();
+        }
 
-    [Test]
-    public void IncreaseSalary_ZeroPercentIncrease_ShouldNotChange()
-    {
-        throw new NotImplementedException();
-    }
-
-    [Test]
-    public void IncreaseSalary_NegativeIncrease_ShouldDecrease()
-    {
-        throw new NotImplementedException();
-    }
-
-    [Test]
-    public void IncreaseSalary_SmallerThanMinusTenPerc_ShouldFail()
-    {
-        throw new NotImplementedException();
+        [Test]
+        public void SmallerThanMinusTenPercent_ShouldFail()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
