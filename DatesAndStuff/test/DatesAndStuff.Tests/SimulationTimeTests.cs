@@ -56,15 +56,25 @@ public class SimulationTimeTests
         // >= same
         // max
         // min
-        public void GivenTwoSimulationTimes_WhenCompared_ThenComparisonIsCorrect()
+        public void GivenTwoEqualSimulationTimes_WhenCompared_ThenTheyShouldBeEqual()
         {
-            throw new NotImplementedException();
+            var time1 = new SimulationTime(2024, 2, 26, 10, 0, 0);
+            var time2 = new SimulationTime(2024, 2, 26, 10, 0, 0);
+
+            Assert.AreEqual(time1, time2, "The two SimulationTime instances should be equal.");
+            Assert.IsTrue(time1 == time2, "'==' operator should return true for equal values.");
+            Assert.IsFalse(time1 != time2, "'!=' operator should return false for equal values.");
         }
 
         [Test]
-        public void SubtractingAnotherSimulationTime_ShouldReturnCorrectDifference()
+        public void GivenTwoDifferentSimulationTimes_WhenCompared_ThenTheyShouldNotBeEqual()
         {
-            throw new NotImplementedException();
+            var time1 = new SimulationTime(2024, 2, 26, 10, 0, 0);
+            var time2 = new SimulationTime(2024, 2, 26, 10, 0, 1);
+
+            Assert.AreNotEqual(time1, time2, "The two SimulationTime instances should be different.");
+            Assert.IsFalse(time1 == time2, "'==' operator should return false for different values.");
+            Assert.IsTrue(time1 != time2, "'!=' operator should return true for different values.");
         }
     }
 
