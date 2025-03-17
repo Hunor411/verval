@@ -1,32 +1,24 @@
-﻿using FluentAssertions;
+﻿using AutoFixture;
+using FluentAssertions;
 
 namespace DatesAndStuff.Tests;
 
 [TestFixture]
 public class PersonTests
 {
-    Person sut;
-
     [SetUp]
     public void Setup()
     {
-        this.sut = new Person("Test Pista", 54);
     }
     
     [TestFixture]
     public class MarrigeTests
     {
-        private Person sut;
-
-        public MarrigeTests()
-        {
-            this.sut = new Person("Test Pista", 54);
-        }
-
         [Test]
         public void GotMerried_First_NameShouldChange()
         {
             // Arrange
+            var sut = PersonFactory.CreateTestPerson();
             string newName = "Test-Eleso Pista";
             var beforeChanges = Person.Clone(sut);
 
@@ -42,12 +34,16 @@ public class PersonTests
         public void GotMerried_Second_ShouldFail()
         {
             // Arrange
-            var freshPerson = new Person("Teszt Pista", 54);
+            var fixture = new AutoFixture.Fixture();
+            fixture.Customize<IPaymentService>(
+                c => c.FromFactory(() => new TestPaymentService())
+                );
+            var freshPerson = fixture.Create<Person>();
             string newName = "Test-Eleso-Felallo Pista";
-            freshPerson.GotMarried("");
+            freshPerson.GotMarried(newName);
 
             // Act
-            Action action = () => freshPerson.GotMarried("");
+            Action action = () => freshPerson.GotMarried("Valalmi uj nev");
 
             // Assert
             action.Should().Throw<Exception>().WithMessage("Poligamy not yet supported.");
@@ -57,15 +53,9 @@ public class PersonTests
     [TestFixture]
     public class SalaryTests
     {
-        private Person sut;
-
-        public SalaryTests()
-        {
-            this.sut = new Person("Test Pista", 54);
-        }
-        
         [Test]
-        public void PositiveIncrease_ShouldIncreaseSalary()
+        [CustomPersonCreationAutodata]
+        public void PositiveIncrease_ShouldIncreaseSalary(Person sut,double salaryIncreasePercentage )
         {
             // Arrange
             double initialSalary = sut.Salary;
@@ -78,7 +68,8 @@ public class PersonTests
         }
 
         [Test]
-        public void ZeroPercentIncrease_ShouldNotChangeSalary()
+        [CustomPersonCreationAutodata]
+        public void ZeroPercentIncrease_ShouldNotChangeSalary(Person sut)
         {
             // Arrange
             double initialSalary = sut.Salary;
@@ -91,7 +82,8 @@ public class PersonTests
         }
 
         [Test]
-        public void NegativeIncrease_ShouldDecreaseSalary()
+        [CustomPersonCreationAutodata]
+        public void NegativeIncrease_ShouldDecreaseSalary(Person sut)
         {
             // Arrange
             double initialSalary = sut.Salary;
@@ -104,7 +96,8 @@ public class PersonTests
         }
 
         [Test]
-        public void SmallerThanMinusTenPercent_ShouldFail()
+        [CustomPersonCreationAutodata]
+        public void SmallerThanMinusTenPercent_ShouldFail(Person sut)
         {
             // Arrange
             
@@ -113,6 +106,36 @@ public class PersonTests
             
             // Assert
             action.Should().Throw<ArgumentOutOfRangeException>();
+        }
+    }
+
+    [TestFixture]
+    public class ConstrictorTests
+    {
+        [Test]
+        public void Constructor_DefaultParams_ShouldBeAbleToEatChocolate()
+        {
+            // Arrange
+
+            // Act
+            Person sut = PersonFactory.CreateTestPerson();
+
+            // Assert
+            sut.CanEatChocolate.Should().BeTrue();
+        }
+
+        [Test]
+        public void Constructor_DontLikeChocolate_ShouldNotBeAbleToEatChocolate()
+        {
+            // Arrange
+
+            // Act
+            Person sut = PersonFactory.CreateTestPerson(
+                fp => fp.CanEatChocolate = false
+                );
+
+            // Assert
+            sut.CanEatChocolate.Should().BeFalse();
         }
     }
 }
