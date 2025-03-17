@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace DatesAndStuff
 {
     public interface IPaymentService
@@ -15,5 +10,9 @@ namespace DatesAndStuff
         public void ConfirmPayment();
 
         public bool SuccessFul();
+
+        public double Balance { get; }
+        
+        public void CancelPayment();
     }
 }

@@ -1,44 +1,56 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace DatesAndStuff.Tests
 {
     internal class TestPaymentService : IPaymentService
     {
-        uint startCallCount = 0;
-        uint specifyCallCount = 0;
-        uint confirmCallCount = 0;
+        uint _startCallCount = 0;
+        uint _specifyCallCount = 0;
+        uint _confirmCallCount = 0;
+        private double _balance = 1000;
+
+        public double Balance => _balance;
 
         public void StartPayment()
         {
-            if (startCallCount != 0 || specifyCallCount > 0 || confirmCallCount > 0)
-                throw new Exception();
+            if (_startCallCount != 0 || _specifyCallCount > 0 || _confirmCallCount > 0)
+                throw new Exception("Invalid payment flow: StartPayment called in wrong state.");
 
-            startCallCount++;
+            _startCallCount++;
         }
 
         public void SpecifyAmount(double amount)
         {
-            if (startCallCount != 1 || specifyCallCount > 0 || confirmCallCount > 0)
-                throw new Exception();
+            if (_startCallCount != 1 || _specifyCallCount > 0 || _confirmCallCount > 0)
+                throw new Exception("Invalid payment flow: SpecifyAmount called in wrong state.");
 
-            specifyCallCount++;
+            if (amount > _balance)
+                throw new Exception("Insufficient balance.");
+            
+            _specifyCallCount++;
+            _balance -= amount;
         }
 
         public void ConfirmPayment()
         {
-            if (startCallCount != 1 || specifyCallCount != 1 || confirmCallCount > 0)
-                throw new Exception();
+            if (_startCallCount != 1 || _specifyCallCount != 1 || _confirmCallCount > 0)
+                throw new Exception("Invalid payment flow: ConfirmPayment called in wrong state.");
 
-            confirmCallCount++;
+            _confirmCallCount++;
+        }
+        
+        public void CancelPayment()
+        {
+            if (_startCallCount == 0)
+                throw new Exception("No active payment to cancel.");
+
+            _startCallCount = 0;
+            _specifyCallCount = 0;
+            _confirmCallCount = 0;
         }
 
         public bool SuccessFul()
         {
-            return startCallCount == 1 && specifyCallCount == 1 && confirmCallCount == 1;
+            return _startCallCount == 1 && _specifyCallCount == 1 && _confirmCallCount == 1;
         }
     }
 }

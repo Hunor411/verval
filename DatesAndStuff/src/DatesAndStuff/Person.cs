@@ -1,6 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
 
-
 [assembly: InternalsVisibleTo("DatesAndStuff.Tests")]
 
 namespace DatesAndStuff
@@ -76,9 +75,17 @@ namespace DatesAndStuff
         public bool PerformSubsriptionPayment()
         {
             PreferredPayment.StartPayment();
+
+            double currnetBalance = PreferredPayment.Balance;
+            if (currnetBalance < SubscriptionFee)
+            {
+                PreferredPayment.CancelPayment();
+                return false;
+            }
+            
             PreferredPayment.SpecifyAmount(SubscriptionFee);
             PreferredPayment.ConfirmPayment();
-            return true;
+            return PreferredPayment.SuccessFul();
         }
     }
 }
