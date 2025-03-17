@@ -54,60 +54,65 @@ public class PersonTests
     public class SalaryTests
     {
         [Test]
-        [CustomPersonCreationAutodata]
-        public void PositiveIncrease_ShouldIncreaseSalary(Person sut,double salaryIncreasePercentage )
+        [TestCase(1)]
+        [TestCase(5)]
+        [TestCase(10)]
+        [TestCase(25)]
+        [TestCase(50)]
+        public void IncreaseSalary_ReasonableValue_ShouldModifySalary(double salaryIncreasePercentage)
         {
             // Arrange
+            var sut = PersonFactory.CreateTestPerson();
             double initialSalary = sut.Salary;
-            
+    
             // Act
-            sut.IncreaseSalary(10);
-            
+            sut.IncreaseSalary(salaryIncreasePercentage);
+
             // Assert
             sut.Salary.Should().BeGreaterThan(initialSalary, "Salary should increase when given a positive percentage.");
         }
 
         [Test]
-        [CustomPersonCreationAutodata]
-        public void ZeroPercentIncrease_ShouldNotChangeSalary(Person sut)
+        [TestCase(0)]
+        [TestCase(-5)]
+        [TestCase(-9)]
+        public void IncreaseSalary_InvalidValues_ShouldNotIncreaseSalary(double salaryIncreasePercentage)
         {
             // Arrange
+            var sut = PersonFactory.CreateTestPerson();
             double initialSalary = sut.Salary;
-            
+
             // Act
-            sut.IncreaseSalary(0);
+            sut.IncreaseSalary(salaryIncreasePercentage);
 
             // Assert
-            sut.Salary.Should().Be(initialSalary, "A 0% increase should not change the salary.");
+            if (salaryIncreasePercentage == 0)
+            {
+                sut.Salary.Should().Be(initialSalary, "A 0% increase should not change the salary.");
+            }
+            else
+            {
+                sut.Salary.Should().BeLessThan(initialSalary, "A negative salary increase should decrease the salary.");
+            }
         }
 
         [Test]
-        [CustomPersonCreationAutodata]
-        public void NegativeIncrease_ShouldDecreaseSalary(Person sut)
+        [TestCase(-10)]
+        [TestCase(-15)]
+        [TestCase(-50)]
+        public void IncreaseSalary_TooLargeNegativeValue_ShouldFail(double salaryIncreasePercentage)
         {
             // Arrange
-            double initialSalary = sut.Salary;
-            
-            // Act
-            sut.IncreaseSalary(-5);
-            
-            // Assert
-            sut.Salary.Should().BeLessThan(initialSalary, "A negative salary increase should decrease the salary.");
-        }
+            var sut = PersonFactory.CreateTestPerson();
 
-        [Test]
-        [CustomPersonCreationAutodata]
-        public void SmallerThanMinusTenPercent_ShouldFail(Person sut)
-        {
-            // Arrange
-            
             // Act
-            Action action = () => sut.IncreaseSalary(-15);
-            
+            Action action = () => sut.IncreaseSalary(salaryIncreasePercentage);
+
             // Assert
             action.Should().Throw<ArgumentOutOfRangeException>();
         }
     }
+
 
     [TestFixture]
     public class ConstrictorTests
