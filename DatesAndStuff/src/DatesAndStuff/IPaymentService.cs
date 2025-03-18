@@ -8,9 +8,7 @@ namespace DatesAndStuff
         public void SpecifyAmount(double amount);
 
         public void ConfirmPayment();
-
-        public bool SuccessFul();
-
+        
         public double Balance { get; }
         
         public void CancelPayment();

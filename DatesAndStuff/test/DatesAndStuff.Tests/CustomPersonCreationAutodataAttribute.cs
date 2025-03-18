@@ -15,10 +15,13 @@ namespace DatesAndStuff.Tests
             fixture.Customize(new AutoMoqCustomization());
 
             var paymentSequence = new MockSequence();
-            var paymentService = new Mock<IPaymentService>();
-            paymentService.InSequence(paymentSequence).Setup(m => m.StartPayment());
-            paymentService.InSequence(paymentSequence).Setup(m => m.SpecifyAmount(Person.SubscriptionFee));
-            paymentService.InSequence(paymentSequence).Setup(m => m.ConfirmPayment());
+            var paymentService = new Mock<IPaymentService>(MockBehavior.Strict);
+            
+            paymentService.Setup(p => p.Balance).Returns(Person.SubscriptionFee + 100);
+            
+            paymentService.InSequence(paymentSequence).Setup(m => m.StartPayment()).Verifiable();
+            paymentService.InSequence(paymentSequence).Setup(m => m.SpecifyAmount(Person.SubscriptionFee)).Verifiable();
+            paymentService.InSequence(paymentSequence).Setup(m => m.ConfirmPayment()).Verifiable();
             fixture.Inject(paymentService);
 
             //fixture.Register<IPaymentService>(() => new TestPaymentService());

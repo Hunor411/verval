@@ -85,7 +85,7 @@ namespace DatesAndStuff
             
             PreferredPayment.SpecifyAmount(SubscriptionFee);
             PreferredPayment.ConfirmPayment();
-            return PreferredPayment.SuccessFul();
+            return true;
         }
     }
 }

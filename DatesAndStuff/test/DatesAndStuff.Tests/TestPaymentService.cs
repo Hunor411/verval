@@ -6,9 +6,14 @@ namespace DatesAndStuff.Tests
         uint _startCallCount = 0;
         uint _specifyCallCount = 0;
         uint _confirmCallCount = 0;
-        private double _balance = 1000;
+        private double _balance;
 
         public double Balance => _balance;
+
+        public TestPaymentService(double initialBalance = 1000)
+        {
+            _balance = initialBalance;
+        }
 
         public void StartPayment()
         {
@@ -46,11 +51,6 @@ namespace DatesAndStuff.Tests
             _startCallCount = 0;
             _specifyCallCount = 0;
             _confirmCallCount = 0;
-        }
-
-        public bool SuccessFul()
-        {
-            return _startCallCount == 1 && _specifyCallCount == 1 && _confirmCallCount == 1;
         }
     }
 }
