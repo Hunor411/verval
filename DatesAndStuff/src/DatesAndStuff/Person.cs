@@ -2,90 +2,86 @@
 
 [assembly: InternalsVisibleTo("DatesAndStuff.Tests")]
 
-namespace DatesAndStuff
+namespace DatesAndStuff;
+
+public class Person
 {
-    public class Person
+    public const double SubscriptionFee = 500;
+
+    public bool CanEatChocolate { get; }
+
+    public bool CanEatEgg { get; }
+
+    public bool CanEatGluten { get; }
+
+    public bool CanEatLactose { get; }
+
+    private bool married;
+
+    public Person(string name, EmploymentInformation employment, IPaymentService paymentService, LocalTaxData taxData,
+        FoodPreferenceParams foodPreferenceParams)
     {
-        private bool married = false;
+        this.Name = name;
+        this.married = false;
+        this.Employment = employment;
+        this.PreferredPayment = paymentService;
+        this.TaxData = taxData;
+        this.CanEatGluten = foodPreferenceParams.CanEatGluten;
+        this.CanEatLactose = foodPreferenceParams.CanEatLactose;
+        this.CanEatEgg = foodPreferenceParams.CanEatEgg;
+        this.CanEatChocolate = foodPreferenceParams.CanEatChocolate;
+    }
 
-        public string Name { get; private set; }
+    public string Name { get; private set; }
 
-        public double Salary => Employment.Salary;
+    public double Salary => this.Employment.Salary;
 
-        public EmploymentInformation Employment { get; private set; }
+    public EmploymentInformation Employment { get; }
 
-        public IPaymentService PreferredPayment { get; private set; }
+    public IPaymentService PreferredPayment { get; }
 
-        public LocalTaxData TaxData { get; private set; }
+    public LocalTaxData TaxData { get; }
 
-        public readonly bool CanEatGluten;
-
-        public readonly bool CanEatLactose;
-
-        public readonly bool CanEatEgg;
-
-        public readonly bool CanEatChocolate;
-
-        public const double SubscriptionFee = 500;
-
-        public Person(string name, EmploymentInformation employment, IPaymentService paymentService, LocalTaxData taxData, FoodPreferenceParams foodPreferenceParams)
+    public void GotMarried(string newName)
+    {
+        if (this.married)
         {
-            this.Name = name;
-            this.married = false;
-            this.Employment = employment;
-            this.PreferredPayment = paymentService;
-            this.TaxData = taxData;
-            this.CanEatGluten = foodPreferenceParams.CanEatGluten;
-            this.CanEatLactose = foodPreferenceParams.CanEatLactose;
-            this.CanEatEgg = foodPreferenceParams.CanEatEgg;
-            this.CanEatChocolate = foodPreferenceParams.CanEatChocolate;
-
+            throw new InvalidOperationException("Poligamy not yet supported.");
         }
 
-        public void GotMarried(string newName)
-        {
-            if (married)
-                throw new Exception("Poligamy not yet supported.");
+        this.married = true;
+        this.Name = newName;
+    }
 
-            this.married = true;
-            this.Name = newName;
-        }
+    public void IncreaseSalary(double percentage) => this.Employment.IncreaseSalary(percentage);
 
-        public void IncreaseSalary(double percentage)
-        {
-            Employment.IncreaseSalary(percentage);
-        }
-
-        public static Person Clone(Person p)
-        {
-            return new Person(p.Name,
-                new EmploymentInformation(p.Employment.Salary, p.Employment.Employer.Clone()),
-                p.PreferredPayment,
-                p.TaxData,
-                new FoodPreferenceParams
-                {
-                    CanEatGluten = p.CanEatGluten,
-                    CanEatEgg = p.CanEatEgg,
-                    CanEatChocolate = p.CanEatChocolate,
-                    CanEatLactose = p.CanEatLactose
-                }
-               );
-        }
-
-        public bool PerformSubsriptionPayment()
-        {
-            PreferredPayment.StartPayment();
-
-            double currnetBalance = PreferredPayment.Balance;
-            if (currnetBalance < SubscriptionFee)
+    public static Person Clone(Person p) =>
+        new(p.Name,
+            new EmploymentInformation(p.Employment.Salary, p.Employment.Employer.Clone()),
+            p.PreferredPayment,
+            p.TaxData,
+            new FoodPreferenceParams
             {
-                PreferredPayment.CancelPayment();
-                return false;
+                CanEatGluten = p.CanEatGluten,
+                CanEatEgg = p.CanEatEgg,
+                CanEatChocolate = p.CanEatChocolate,
+                CanEatLactose = p.CanEatLactose
             }
-            
-            PreferredPayment.SpecifyAmount(SubscriptionFee);
-            PreferredPayment.ConfirmPayment();
-            return true;
+        );
+
+    public bool PerformSubsriptionPayment()
+    {
+        this.PreferredPayment.StartPayment();
+
+        var currnetBalance = this.PreferredPayment.Balance;
+        if (currnetBalance < SubscriptionFee)
+        {
+            this.PreferredPayment.CancelPayment();
+            return false;
         }
+
+        this.PreferredPayment.SpecifyAmount(SubscriptionFee);
+        this.PreferredPayment.ConfirmPayment();
+        return true;
     }
 }

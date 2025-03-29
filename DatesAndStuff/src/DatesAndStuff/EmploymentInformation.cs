@@ -1,29 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace DatesAndStuff;
 
-namespace DatesAndStuff
+public class EmploymentInformation
 {
-    public class EmploymentInformation
+    public EmploymentInformation(double salary, Employer e)
     {
-        public double Salary { get; private set; }
+        this.Salary = salary;
+        this.Employer = e;
+    }
 
-        public Employer Employer { get; private set; }
+    public double Salary { get; private set; }
 
-        public EmploymentInformation(double salary, Employer e)
-        {
-            this.Salary = salary;
-            this.Employer = e;
-        }
+    public Employer Employer { get; private set; }
 
-        public void IncreaseSalary(double percentage)
-        {
-            if (percentage <= -10)
-                throw new ArgumentOutOfRangeException(nameof(percentage));
+    public void IncreaseSalary(double percentage)
+    {
+        ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(percentage, -10);
 
-            this.Salary = this.Salary * (1 + percentage / 100);
-        }
+        this.Salary = this.Salary * (1 + (percentage / 100));
     }
 }

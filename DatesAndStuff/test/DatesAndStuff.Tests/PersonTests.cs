@@ -1,7 +1,7 @@
-﻿using AutoFixture;
-using FluentAssertions;
+﻿namespace DatesAndStuff.Tests;
 
-namespace DatesAndStuff.Tests;
+using AutoFixture;
+using FluentAssertions;
 
 [TestFixture]
 public class PersonTests
@@ -10,16 +10,16 @@ public class PersonTests
     public void Setup()
     {
     }
-    
+
     [TestFixture]
     public class MarrigeTests
     {
         [Test]
-        public void GotMerried_First_NameShouldChange()
+        public void GotMerriedFirstNameShouldChange()
         {
             // Arrange
             var sut = PersonFactory.CreateTestPerson();
-            string newName = "Test-Eleso Pista";
+            var newName = "Test-Eleso Pista";
             var beforeChanges = Person.Clone(sut);
 
             // Act
@@ -31,25 +31,25 @@ public class PersonTests
         }
 
         [Test]
-        public void GotMerried_Second_ShouldFail()
+        public void GotMerriedSecondShouldFail()
         {
             // Arrange
-            var fixture = new AutoFixture.Fixture();
+            var fixture = new Fixture();
             fixture.Customize<IPaymentService>(
                 c => c.FromFactory(() => new TestPaymentService())
-                );
+            );
             var freshPerson = fixture.Create<Person>();
-            string newName = "Test-Eleso-Felallo Pista";
+            var newName = "Test-Eleso-Felallo Pista";
             freshPerson.GotMarried(newName);
 
             // Act
-            Action action = () => freshPerson.GotMarried("Valalmi uj nev");
+            var action = () => freshPerson.GotMarried("Valalmi uj nev");
 
             // Assert
             action.Should().Throw<Exception>().WithMessage("Poligamy not yet supported.");
-        }   
+        }
     }
-    
+
     [TestFixture]
     public class SalaryTests
     {
@@ -59,28 +59,29 @@ public class PersonTests
         [TestCase(10)]
         [TestCase(25)]
         [TestCase(50)]
-        public void IncreaseSalary_ReasonableValue_ShouldModifySalary(double salaryIncreasePercentage)
+        public void IncreaseSalaryReasonableValueShouldModifySalary(double salaryIncreasePercentage)
         {
             // Arrange
             var sut = PersonFactory.CreateTestPerson();
-            double initialSalary = sut.Salary;
-    
+            var initialSalary = sut.Salary;
+
             // Act
             sut.IncreaseSalary(salaryIncreasePercentage);
 
             // Assert
-            sut.Salary.Should().BeGreaterThan(initialSalary, "Salary should increase when given a positive percentage.");
+            sut.Salary.Should()
+                .BeGreaterThan(initialSalary, "Salary should increase when given a positive percentage.");
         }
 
         [Test]
         [TestCase(0)]
         [TestCase(-5)]
         [TestCase(-9)]
-        public void IncreaseSalary_InvalidValues_ShouldNotIncreaseSalary(double salaryIncreasePercentage)
+        public void IncreaseSalaryInvalidValuesShouldNotIncreaseSalary(double salaryIncreasePercentage)
         {
             // Arrange
             var sut = PersonFactory.CreateTestPerson();
-            double initialSalary = sut.Salary;
+            var initialSalary = sut.Salary;
 
             // Act
             sut.IncreaseSalary(salaryIncreasePercentage);
@@ -100,13 +101,13 @@ public class PersonTests
         [TestCase(-10)]
         [TestCase(-15)]
         [TestCase(-50)]
-        public void IncreaseSalary_TooLargeNegativeValue_ShouldFail(double salaryIncreasePercentage)
+        public void IncreaseSalaryTooLargeNegativeValueShouldFail(double salaryIncreasePercentage)
         {
             // Arrange
             var sut = PersonFactory.CreateTestPerson();
 
             // Act
-            Action action = () => sut.IncreaseSalary(salaryIncreasePercentage);
+            var action = () => sut.IncreaseSalary(salaryIncreasePercentage);
 
             // Assert
             action.Should().Throw<ArgumentOutOfRangeException>();
@@ -118,26 +119,26 @@ public class PersonTests
     public class ConstrictorTests
     {
         [Test]
-        public void Constructor_DefaultParams_ShouldBeAbleToEatChocolate()
+        public void ConstructorWithDefaultParamsShouldBeAbleToEatChocolate()
         {
             // Arrange
 
             // Act
-            Person sut = PersonFactory.CreateTestPerson();
+            var sut = PersonFactory.CreateTestPerson();
 
             // Assert
             sut.CanEatChocolate.Should().BeTrue();
         }
 
         [Test]
-        public void Constructor_DontLikeChocolate_ShouldNotBeAbleToEatChocolate()
+        public void ConstructorDontLikeChocolateShouldNotBeAbleToEatChocolate()
         {
             // Arrange
 
             // Act
-            Person sut = PersonFactory.CreateTestPerson(
+            var sut = PersonFactory.CreateTestPerson(
                 fp => fp.CanEatChocolate = false
-                );
+            );
 
             // Assert
             sut.CanEatChocolate.Should().BeFalse();

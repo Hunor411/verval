@@ -1,27 +1,17 @@
-﻿namespace DatesAndStuff
+﻿namespace DatesAndStuff;
+
+public class LocalTaxData
 {
-    public class LocalTaxData
-    {
-        /// <summary>
-        /// Administrative territorial unit identifier.
-        /// </summary>
-        public string UAT { get; private set; }
+    public LocalTaxData(string UAT) => this.UAT = UAT;
 
-        public List<TaxItem> TaxItems { get; set; }
+    /// <summary>
+    ///     Administrative territorial unit identifier.
+    /// </summary>
+    public string UAT { get; private set; }
 
-        public double DiscountPercentage { get; set; }
+    public List<TaxItem> TaxItems { get; set; }
 
-        public double YearlyTax
-        {
-            get
-            {
-                return 0;
-            }
-        }
+    public double DiscountPercentage { get; set; }
 
-        public LocalTaxData(string UAT)
-        {
-            this.UAT = UAT;
-        }
-    }
+    public static double YearlyTax => 0;
 }

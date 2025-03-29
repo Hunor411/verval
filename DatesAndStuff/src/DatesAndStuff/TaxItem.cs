@@ -1,9 +1,8 @@
-﻿namespace DatesAndStuff
-{
-    public class TaxItem
-    {
-        public string ReferenceNumber { get; set; }
+﻿namespace DatesAndStuff;
 
-        public double BaseTax { get; set; }
-    }
+public class TaxItem
+{
+    public string ReferenceNumber { get; set; }
+
+    public double BaseTax { get; set; }
 }

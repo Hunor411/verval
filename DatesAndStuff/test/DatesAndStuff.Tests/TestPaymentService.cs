@@ -1,56 +1,60 @@
-﻿
-namespace DatesAndStuff.Tests
+﻿namespace DatesAndStuff.Tests;
+
+internal sealed class TestPaymentService : IPaymentService
 {
-    internal class TestPaymentService : IPaymentService
+    private uint confirmCallCount;
+    private uint specifyCallCount;
+    private uint startCallCount;
+
+    public TestPaymentService(double initialBalance = 1000) => this.Balance = initialBalance;
+
+    public double Balance { get; private set; }
+
+    public void StartPayment()
     {
-        uint _startCallCount = 0;
-        uint _specifyCallCount = 0;
-        uint _confirmCallCount = 0;
-        private double _balance;
-
-        public double Balance => _balance;
-
-        public TestPaymentService(double initialBalance = 1000)
+        if (this.startCallCount != 0 || this.specifyCallCount > 0 || this.confirmCallCount > 0)
         {
-            _balance = initialBalance;
+            throw new InvalidOperationException("StartPayment called in wrong state.");
         }
 
-        public void StartPayment()
-        {
-            if (_startCallCount != 0 || _specifyCallCount > 0 || _confirmCallCount > 0)
-                throw new Exception("Invalid payment flow: StartPayment called in wrong state.");
+        this.startCallCount++;
+    }
 
-            _startCallCount++;
+    public void SpecifyAmount(double amount)
+    {
+        if (this.startCallCount != 1 || this.specifyCallCount > 0 || this.confirmCallCount > 0)
+        {
+            throw new InvalidOperationException("SpecifyAmount called in wrong state.");
         }
 
-        public void SpecifyAmount(double amount)
+        if (amount > this.Balance)
         {
-            if (_startCallCount != 1 || _specifyCallCount > 0 || _confirmCallCount > 0)
-                throw new Exception("Invalid payment flow: SpecifyAmount called in wrong state.");
-
-            if (amount > _balance)
-                throw new Exception("Insufficient balance.");
-            
-            _specifyCallCount++;
-            _balance -= amount;
+            throw new InvalidOperationException("Insufficient balance.");
         }
 
-        public void ConfirmPayment()
-        {
-            if (_startCallCount != 1 || _specifyCallCount != 1 || _confirmCallCount > 0)
-                throw new Exception("Invalid payment flow: ConfirmPayment called in wrong state.");
+        this.specifyCallCount++;
+        this.Balance -= amount;
+    }
 
-            _confirmCallCount++;
-        }
-        
-        public void CancelPayment()
+    public void ConfirmPayment()
+    {
+        if (this.startCallCount != 1 || this.specifyCallCount != 1 || this.confirmCallCount > 0)
         {
-            if (_startCallCount == 0)
-                throw new Exception("No active payment to cancel.");
-
-            _startCallCount = 0;
-            _specifyCallCount = 0;
-            _confirmCallCount = 0;
+            throw new InvalidOperationException("ConfirmPayment called in wrong state.");
         }
+
+        this.confirmCallCount++;
+    }
+
+    public void CancelPayment()
+    {
+        if (this.startCallCount == 0)
+        {
+            throw new InvalidOperationException("No active payment to cancel.");
+        }
+
+        this.startCallCount = 0;
+        this.specifyCallCount = 0;
+        this.confirmCallCount = 0;
     }
 }

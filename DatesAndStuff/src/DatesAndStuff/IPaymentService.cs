@@ -1,16 +1,13 @@
-﻿
-namespace DatesAndStuff
+﻿namespace DatesAndStuff;
+
+public interface IPaymentService
 {
-    public interface IPaymentService
-    {
-        public void StartPayment();
+    public double Balance { get; }
+    public void StartPayment();
 
-        public void SpecifyAmount(double amount);
+    public void SpecifyAmount(double amount);
 
-        public void ConfirmPayment();
-        
-        public double Balance { get; }
-        
-        public void CancelPayment();
-    }
+    public void ConfirmPayment();
+
+    public void CancelPayment();
 }
