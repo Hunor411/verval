@@ -20,6 +20,8 @@ test:
   image: mcr.microsoft.com/dotnet/sdk:8.0
   script:
     - dotnet test --collect="XPlat Code Coverage"
+    - dotnet tool install -g dotnet-reportgenerator-globaltool
+    - export PATH="$PATH:/root/.dotnet/tools"
     - reportgenerator -reports:"**/coverage.cobertura.xml" -targetdir:"coverage-report" -reporttypes:"Html"
   artifacts:
     when: always
