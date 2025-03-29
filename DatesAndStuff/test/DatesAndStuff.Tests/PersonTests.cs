@@ -143,5 +143,14 @@ public class PersonTests
             // Assert
             sut.CanEatChocolate.Should().BeFalse();
         }
+
+        [Test]
+        [CustomPersonCreationAutodata(true)]
+        public void ConstructorYearlyTaxDataShouldBeZero(Person sut)
+        {
+            var yearlyTax = LocalTaxData.YearlyTax;
+
+            yearlyTax.Should().Be(0);
+        }
     }
 }

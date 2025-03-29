@@ -61,6 +61,51 @@ public class SimulationTimeTests
             actualString.Should().Be(expectedFormat,
                 $"SimulationTime.ToString() should return the correct format, but was '{actualString}'.");
         }
+
+        [Test]
+        public void ConstructorFromValidStringShouldSetLogicalTicksCorrectly()
+        {
+            // Arrange
+            long expectedTicks = 1234560000;
+            var tickString = expectedTicks.ToString(CultureInfo.InvariantCulture);
+
+            // Act
+            var simulationTime = new SimulationTime(tickString);
+
+            // Assert
+            simulationTime.LogicalTicks.Should().Be(expectedTicks,
+                "The LogicalTicks should be correctly parsed from the input string.");
+        }
+
+        [Test]
+        public void ConstructorFromYearMontDayShouldBeOk()
+        {
+            // Arrange
+            var year = 2025;
+            var month = 1;
+            var day = 13;
+
+            var expectedDate = new DateTime(year, month, day);
+
+            // Act
+            var simulationTime = new SimulationTime(year, month, day);
+
+            // Assert
+            simulationTime.ToAbsoluteDateTime().Date.Should().Be(expectedDate.Date,
+                "The SimulationTime created from year, month and day should match the expected date.");
+        }
+
+        [Test]
+        public void SimulationTimeNowShouldBeCloseToCurrentDateTime()
+        {
+            // Act
+            var now = DateTime.Now;
+            var simulationNow = SimulationTime.Now;
+
+            // Assert
+            simulationNow.ToAbsoluteDateTime().Should().BeCloseTo(now, TimeSpan.FromSeconds(2),
+                "SimulationTime.Now should return a time close to the current system time.");
+        }
     }
 
     [TestFixture]
