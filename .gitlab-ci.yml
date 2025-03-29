@@ -13,3 +13,16 @@ build:
     paths:
       - ~/.nuget/packages/
 
+test:
+  stage: test
+  needs:
+    - build
+  image: mcr.microsoft.com/dotnet/sdk:8.0
+  script:
+    - dotnet test --collect="XPlat Code Coverage"
+    - reportgenerator -reports:"**/coverage.cobertura.xml" -targetdir:"coverage-report" -reporttypes:"Html"
+  artifacts:
+    when: always
+    paths:
+      - coverage-report/
+    expire_in: 1 week
