@@ -28,6 +28,7 @@ test:
     when: always
     paths:
       - coverage-report/
+      - '**/coverage.cobertura.xml'
     expire_in: 1 week
 
 build_sonar:
@@ -47,10 +48,12 @@ build_sonar:
   script:
     - dotnet tool install --global dotnet-sonarscanner
     - export PATH="$PATH:$HOME/.dotnet/tools"
-    - dotnet sonarscanner begin /k:"deakHuni_verval_e0027f5c-2c94-4091-a0f7-55607086bedb" /d:sonar.token="$SONAR_TOKEN" /d:sonar.host.url="$SONAR_HOST_URL"
+    - dotnet sonarscanner begin /k:"deakHuni_verval_e0027f5c-2c94-4091-a0f7-55607086bedb" /d:sonar.token="$SONAR_TOKEN" /d:sonar.host.url="$SONAR_HOST_URL" /d:sonar.cs.opencover.reportsPaths="**/coverage.cobertura.xml"
     - dotnet build
     - dotnet sonarscanner end /d:sonar.token="$SONAR_TOKEN"
   allow_failure: true
+  dependencies:
+    - test
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: '$CI_COMMIT_BRANCH == "master"'
