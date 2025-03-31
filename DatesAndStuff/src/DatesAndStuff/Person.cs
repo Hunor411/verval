@@ -1,51 +1,87 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("DatesAndStuff.Tests")]
 
-[assembly:InternalsVisibleTo("DatesAndStuff.Tests")]
+namespace DatesAndStuff;
 
-namespace DatesAndStuff
+public class Person
 {
-    
-    internal class Person
+    public const double SubscriptionFee = 500;
+
+    public bool CanEatChocolate { get; }
+
+    public bool CanEatEgg { get; }
+
+    public bool CanEatGluten { get; }
+
+    public bool CanEatLactose { get; }
+
+    private bool married;
+
+    public Person(string name, EmploymentInformation employment, IPaymentService paymentService, LocalTaxData taxData,
+        FoodPreferenceParams foodPreferenceParams)
     {
-        private bool married = false;
+        this.Name = name;
+        this.married = false;
+        this.Employment = employment;
+        this.PreferredPayment = paymentService;
+        this.TaxData = taxData;
+        this.CanEatGluten = foodPreferenceParams.CanEatGluten;
+        this.CanEatLactose = foodPreferenceParams.CanEatLactose;
+        this.CanEatEgg = foodPreferenceParams.CanEatEgg;
+        this.CanEatChocolate = foodPreferenceParams.CanEatChocolate;
+    }
 
-        public string Name { get; private set; }
+    public string Name { get; private set; }
 
-        public double Salary { get; private set; }
+    public double Salary => this.Employment.Salary;
 
-        public Person(string name, double salary) {
-            this.Name = name;
-            this.Salary = salary;
-            this.married = false;
-        }
+    public EmploymentInformation Employment { get; }
 
-        public void GotMarried(string newName)
+    public IPaymentService PreferredPayment { get; }
+
+    public LocalTaxData TaxData { get; }
+
+    public void GotMarried(string newName)
+    {
+        if (this.married)
         {
-            if (married)
-                throw new Exception("Poligamy not yet supported.");
-
-            this.married = true;
-            this.Name = newName;
+            throw new InvalidOperationException("Poligamy not yet supported.");
         }
 
-        public void IncreaseSalary(double percentage)
+        this.married = true;
+        this.Name = newName;
+    }
+
+    public void IncreaseSalary(double percentage) => this.Employment.IncreaseSalary(percentage);
+
+    public static Person Clone(Person p) =>
+        new(p.Name,
+            new EmploymentInformation(p.Employment.Salary, p.Employment.Employer.Clone()),
+            p.PreferredPayment,
+            p.TaxData,
+            new FoodPreferenceParams
+            {
+                CanEatGluten = p.CanEatGluten,
+                CanEatEgg = p.CanEatEgg,
+                CanEatChocolate = p.CanEatChocolate,
+                CanEatLactose = p.CanEatLactose
+            }
+        );
+
+    public bool PerformSubsriptionPayment()
+    {
+        this.PreferredPayment.StartPayment();
+
+        var currnetBalance = this.PreferredPayment.Balance;
+        if (currnetBalance < SubscriptionFee)
         {
-            if (percentage <= -10 )
-                throw new ArgumentOutOfRangeException(nameof(percentage));
-
-            this.Salary = this.Salary * (1 + percentage / 100);
+            this.PreferredPayment.CancelPayment();
+            return false;
         }
 
-        public static Person Clone(Person p)
-        {
-            return new Person(p.Name, p.Salary);
-        }
+        this.PreferredPayment.SpecifyAmount(SubscriptionFee);
+        this.PreferredPayment.ConfirmPayment();
+        return true;
     }
 }
