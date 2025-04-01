@@ -46,7 +46,7 @@ build_sonar:
   script:
     - dotnet tool install --global dotnet-sonarscanner
     - export PATH="$PATH:$HOME/.dotnet/tools"
-    - dotnet sonarscanner begin /k:"deakHuni_verval_e0027f5c-2c94-4091-a0f7-55607086bedb" /d:sonar.token="$SONAR_TOKEN" /d:sonar.host.url="$SONAR_HOST_URL" /d:sonar.cs.opencover.reportsPaths="**/TestResults/coverage.xml"
+    - dotnet sonarscanner begin /k:"deakHuni_verval_e0027f5c-2c94-4091-a0f7-55607086bedb" /d:sonar.token="$SONAR_TOKEN" /d:sonar.host.url="$SONAR_HOST_URL" /d:sonar.cs.opencover.reportsPaths="**/coverage.cobertura.xml"
     - dotnet build
     - dotnet sonarscanner end /d:sonar.token="$SONAR_TOKEN"
   dependencies:
