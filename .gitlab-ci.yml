@@ -21,12 +21,12 @@ test:
     - dotnet test ./DatesAndStuff/test/DatesAndStuff.Tests/DatesAndStuff.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=TestResults/coverage.xml
     - dotnet tool install -g dotnet-reportgenerator-globaltool
     - export PATH="$PATH:/root/.dotnet/tools"
-    - reportgenerator -reports:"**/coverage.cobertura.xml" -targetdir:"coverage-report" -reporttypes:"Html"
+    - reportgenerator -reports:"DatesAndStuff/test/DatesAndStuff.Tests/TestResults/*/coverage.cobertura.xml" -targetdir:"coverage-report" -reporttypes:"Html"
   artifacts:
     when: always
     paths:
       - coverage-report/
-      - '**/coverage.cobertura.xml'
+      - DatesAndStuff/test/DatesAndStuff.Tests/TestResults/*/coverage.cobertura.xml
     expire_in: 1 week
 
 build_sonar:
@@ -49,7 +49,7 @@ build_sonar:
     - cat DatesAndStuff/test/DatesAndStuff.Tests/TestResults/*/coverage.cobertura.xml || echo "NEM JO"
     - dotnet tool install --global dotnet-sonarscanner
     - export PATH="$PATH:$HOME/.dotnet/tools"
-    - dotnet sonarscanner begin /k:"deakHuni_verval_e0027f5c-2c94-4091-a0f7-55607086bedb" /d:sonar.token="$SONAR_TOKEN" /d:sonar.host.url="$SONAR_HOST_URL" /d:sonar.cs.opencover.reportsPaths="**/TestResults/coverage.xml"
+    - dotnet sonarscanner begin /k:"deakHuni_verval_e0027f5c-2c94-4091-a0f7-55607086bedb" /d:sonar.token="$SONAR_TOKEN" /d:sonar.host.url="$SONAR_HOST_URL" /d:sonar.cs.opencover.reportsPaths="DatesAndStuff/test/DatesAndStuff.Tests/TestResults/*/coverage.cobertura.xml"
     - dotnet build
     - dotnet sonarscanner end /d:sonar.token="$SONAR_TOKEN"
   dependencies:
