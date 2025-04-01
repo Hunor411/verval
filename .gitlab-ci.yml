@@ -44,7 +44,7 @@ build_sonar:
       - "${SONAR_USER_HOME}/cache"
       - sonar-scanner/
   script:
-    - echo "Debug: coverage.cobertura.xml-re:"
+    - echo "TESZT::::"
     - find . -name "coverage.cobertura.xml"
     - cat DatesAndStuff/test/DatesAndStuff.Tests/TestResults/*/coverage.cobertura.xml || echo "NEM JO"
     - dotnet tool install --global dotnet-sonarscanner
