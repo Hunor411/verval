@@ -18,7 +18,7 @@ test:
   stage: test
   image: mcr.microsoft.com/dotnet/sdk:8.0
   script:
-    - dotnet test --collect:"XPlat Code Coverage"
+    - dotnet test ./DatesAndStuff.Tests/DatesAndStuff.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=TestResults/coverage.xml
     - dotnet tool install -g dotnet-reportgenerator-globaltool
     - export PATH="$PATH:/root/.dotnet/tools"
     - reportgenerator -reports:"**/coverage.cobertura.xml" -targetdir:"coverage-report" -reporttypes:"Html"
@@ -49,7 +49,7 @@ build_sonar:
     - cat DatesAndStuff/test/DatesAndStuff.Tests/TestResults/*/coverage.cobertura.xml || echo "NEM JO"
     - dotnet tool install --global dotnet-sonarscanner
     - export PATH="$PATH:$HOME/.dotnet/tools"
-    - dotnet sonarscanner begin /k:"deakHuni_verval_e0027f5c-2c94-4091-a0f7-55607086bedb" /d:sonar.token="$SONAR_TOKEN" /d:sonar.host.url="$SONAR_HOST_URL" /d:sonar.cs.opencover.reportsPaths="**/coverage.cobertura.xml"
+    - dotnet sonarscanner begin /k:"deakHuni_verval_e0027f5c-2c94-4091-a0f7-55607086bedb" /d:sonar.token="$SONAR_TOKEN" /d:sonar.host.url="$SONAR_HOST_URL" /d:sonar.cs.opencover.reportsPaths="**/TestResults/coverage.xml"
     - dotnet build
     - dotnet sonarscanner end /d:sonar.token="$SONAR_TOKEN"
   dependencies:
