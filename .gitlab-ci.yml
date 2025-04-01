@@ -44,6 +44,9 @@ build_sonar:
       - "${SONAR_USER_HOME}/cache"
       - sonar-scanner/
   script:
+    - echo "Debug: coverage.cobertura.xml-re:"
+    - find . -name "coverage.cobertura.xml"
+    - cat DatesAndStuff/test/DatesAndStuff.Tests/TestResults/*/coverage.cobertura.xml || echo "NEM JO"
     - dotnet tool install --global dotnet-sonarscanner
     - export PATH="$PATH:$HOME/.dotnet/tools"
     - dotnet sonarscanner begin /k:"deakHuni_verval_e0027f5c-2c94-4091-a0f7-55607086bedb" /d:sonar.token="$SONAR_TOKEN" /d:sonar.host.url="$SONAR_HOST_URL" /d:sonar.cs.opencover.reportsPaths="**/coverage.cobertura.xml"
