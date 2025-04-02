@@ -19,12 +19,12 @@ test:
   image: mcr.microsoft.com/dotnet/sdk:8.0
   script:
     - mkdir -p coverage
-    - dotnet test ./DatesAndStuff/test/DatesAndStuff.Tests/DatesAndStuff.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(pwd)/coverage/coverage.cobertura.xml
+    - dotnet test --collect="XPlat Code Coverage"
     - ls DatesAndStuff/test/DatesAndStuff.Tests/
     - ls DatesAndStuff/test/DatesAndStuff.Tests/TestResults
     - dotnet tool install -g dotnet-reportgenerator-globaltool
     - export PATH="$PATH:/root/.dotnet/tools"
-    - reportgenerator -reports:"DatesAndStuff/test/DatesAndStuff.Tests/TestResults/*/coverage.cobertura.xml" -targetdir:"coverage-report" -reporttypes:"Html"
+    - reportgenerator -reports:"**/coverage.cobertura.xml" -targetdir:"coverage-report" -reporttypes:"Html"
   artifacts:
     when: always
     paths:
