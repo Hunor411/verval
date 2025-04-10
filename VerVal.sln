@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatesAndStuff", "DatesAndSt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatesAndStuff.Tests", "DatesAndStuff\test\DatesAndStuff.Tests\DatesAndStuff.Tests.csproj", "{2872B081-A50B-47E7-B172-24C00459FD94}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatesAndStuff.Web", "DatesAndStuff.Web\src\DatesAndStuff.Web\DatesAndStuff.Web.csproj", "{242C6736-8BDB-45DC-B11B-63736452CDA7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatesAndStuff.Web.Tests", "DatesAndStuff.Web\test\DatesAndStuff.Web.Tests\DatesAndStuff.Web.Tests.csproj", "{522D5833-C0D5-4CEC-87E5-6403C26BF16D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{2872B081-A50B-47E7-B172-24C00459FD94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2872B081-A50B-47E7-B172-24C00459FD94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2872B081-A50B-47E7-B172-24C00459FD94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{242C6736-8BDB-45DC-B11B-63736452CDA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{242C6736-8BDB-45DC-B11B-63736452CDA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{242C6736-8BDB-45DC-B11B-63736452CDA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{242C6736-8BDB-45DC-B11B-63736452CDA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{522D5833-C0D5-4CEC-87E5-6403C26BF16D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{522D5833-C0D5-4CEC-87E5-6403C26BF16D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{522D5833-C0D5-4CEC-87E5-6403C26BF16D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{522D5833-C0D5-4CEC-87E5-6403C26BF16D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

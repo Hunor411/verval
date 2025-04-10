@@ -10,4 +10,6 @@ public interface IPaymentService
     public void ConfirmPayment();
 
     public void CancelPayment();
+
+    public bool SuccessFul();
 }

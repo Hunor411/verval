@@ -32,7 +32,8 @@ public readonly struct SimulationTime : IEquatable<SimulationTime>, IComparable<
     {
     }
 
-    public SimulationTime(string logicalTickStr) => this.LogicalTicks = Convert.ToInt64(logicalTickStr, CultureInfo.InvariantCulture);
+    public SimulationTime(string logicalTickStr) =>
+        this.LogicalTicks = Convert.ToInt64(logicalTickStr, CultureInfo.InvariantCulture);
 
     /// <summary>
     ///     Strictly for internal use only.
