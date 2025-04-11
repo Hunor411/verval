@@ -96,30 +96,43 @@ public class PersonPageTests
     private const string BaseUrl = "http://localhost:5091";
     private Process? blazorProcess;
 
-    [Test]
-    public void PersonSalaryIncreaseShouldIncrease()
+    [TestCase(5)]
+    [TestCase(10)]
+    [TestCase(15)]
+    [TestCase(20)]
+    [TestCase(25)]
+    public void PersonSalaryIncreaseShouldIncrease(double percentage)
     {
         // Arrange
         this.driver.Navigate().GoToUrl(BaseUrl);
-        this.driver.FindElement(By.XPath("//*[@data-test='PersonPageNavigation']")).Click();
 
         var wait = new WebDriverWait(this.driver, TimeSpan.FromSeconds(5));
+        wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[@data-test='PersonPageNavigation']"))).Click();
 
-        var input = wait.Until(
-            ExpectedConditions.ElementExists(By.XPath("//*[@data-test='SalaryIncreasePercentageInput']")));
+        wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[@data-test='DisplayedSalary']")));
+        var salaryBefore = double.Parse(
+            this.driver.FindElement(By.XPath("//*[@data-test='DisplayedSalary']")).Text,
+            CultureInfo.InvariantCulture
+        );
+
+        wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[@data-test='SalaryIncreasePercentageInput']")));
+        var input = this.driver.FindElement(By.XPath("//*[@data-test='SalaryIncreasePercentageInput']"));
         input.Clear();
-        input.SendKeys("5");
+        input.SendKeys(percentage.ToString(CultureInfo.CurrentCulture));
 
         // Act
-        var submitButton =
-            wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[@data-test='SalaryIncreaseSubmitButton']")));
+        wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[@data-test='SalaryIncreaseSubmitButton']")));
+        var submitButton = this.driver.FindElement(By.XPath("//*[@data-test='SalaryIncreaseSubmitButton']"));
         submitButton.Click();
 
-
         // Assert
-        var salaryLabel =
-            wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[@data-test='DisplayedSalary']")));
-        var salaryAfterSubmission = double.Parse(salaryLabel.Text, CultureInfo.InvariantCulture);
-        salaryAfterSubmission.Should().BeApproximately(5250, 0.001);
+        wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[@data-test='DisplayedSalary']")));
+        var salaryAfter = double.Parse(
+            this.driver.FindElement(By.XPath("//*[@data-test='DisplayedSalary']")).Text,
+            CultureInfo.InvariantCulture
+        );
+
+        var expectedSalary = salaryBefore + (salaryBefore * (percentage / 100.0));
+        salaryAfter.Should().BeApproximately(expectedSalary, 0.001);
     }
 }
