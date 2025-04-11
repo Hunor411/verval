@@ -34,7 +34,7 @@ public class PersonPageTests
             UseShellExecute = false
         };
 
-        this._blazorProcess = Process.Start(startInfo);
+        this.blazorProcess = Process.Start(startInfo);
 
         // Wait for the app to become available
         var client = new HttpClient();
@@ -45,7 +45,7 @@ public class PersonPageTests
         {
             try
             {
-                var result = client.GetAsync(BaseURL).Result;
+                var result = client.GetAsync(BaseUrl).Result;
                 if (result.IsSuccessStatusCode)
                 {
                     break;
@@ -61,10 +61,10 @@ public class PersonPageTests
     [OneTimeTearDown]
     public void StopBlazorServer()
     {
-        if (this._blazorProcess != null && !this._blazorProcess.HasExited)
+        if (this.blazorProcess != null && !this.blazorProcess.HasExited)
         {
-            this._blazorProcess.Kill(true);
-            this._blazorProcess.Dispose();
+            this.blazorProcess.Kill(true);
+            this.blazorProcess.Dispose();
         }
     }
 
@@ -93,16 +93,14 @@ public class PersonPageTests
 
     private ChromeDriver driver;
     private StringBuilder verificationErrors;
-    private const string BaseURL = "http://localhost:5091";
-    private bool acceptNextAlert = true;
-
-    private Process? _blazorProcess;
+    private const string BaseUrl = "http://localhost:5091";
+    private Process? blazorProcess;
 
     [Test]
     public void PersonSalaryIncreaseShouldIncrease()
     {
         // Arrange
-        this.driver.Navigate().GoToUrl(BaseURL);
+        this.driver.Navigate().GoToUrl(BaseUrl);
         this.driver.FindElement(By.XPath("//*[@data-test='PersonPageNavigation']")).Click();
 
         var wait = new WebDriverWait(this.driver, TimeSpan.FromSeconds(5));
