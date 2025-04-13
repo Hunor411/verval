@@ -7,6 +7,7 @@ using System.Text;
 using FluentAssertions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Remote;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
 
@@ -71,16 +72,19 @@ public class PersonPageTests
     [SetUp]
     public void SetupTest()
     {
-        var options = new ChromeOptions();
+        var isCi = Environment.GetEnvironmentVariable("CI") == "true";
 
-        if (Environment.GetEnvironmentVariable("CI") == "true")
+        if (isCi)
         {
-            options.AddArgument("--headless=chrome");
-            options.AddArgument("--no-sandbox");
-            options.AddArgument("--disable-dev-shm-usage");
+            var options = new ChromeOptions();
+            options.AddArgument("--headless");
+            this.driver = new RemoteWebDriver(new Uri("http://selenium__standalone-chrome:4444/wd/hub"), options);
         }
-
-        this.driver = new ChromeDriver(options);
+        else
+        {
+            var options = new ChromeOptions();
+            this.driver = new ChromeDriver(options);
+        }
         this.verificationErrors = new StringBuilder();
     }
 
@@ -100,7 +104,7 @@ public class PersonPageTests
         Assert.That(this.verificationErrors.ToString(), Is.EqualTo(""));
     }
 
-    private ChromeDriver driver;
+    private IWebDriver driver;
     private StringBuilder verificationErrors;
     private const string BaseUrl = "http://localhost:5091";
     private Process? blazorProcess;

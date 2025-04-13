@@ -18,6 +18,8 @@ test:
   needs:
     - build
   image: mcr.microsoft.com/dotnet/sdk:8.0
+  services:
+    - name: selenium/standalone-chrome:latest
   script:
     - dotnet test --collect="XPlat Code Coverage"
     - dotnet tool install -g dotnet-reportgenerator-globaltool
