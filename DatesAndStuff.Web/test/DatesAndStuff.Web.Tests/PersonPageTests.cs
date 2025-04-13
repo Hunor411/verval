@@ -71,7 +71,16 @@ public class PersonPageTests
     [SetUp]
     public void SetupTest()
     {
-        this.driver = new ChromeDriver();
+        var options = new ChromeOptions();
+
+        if (Environment.GetEnvironmentVariable("CI") == "true")
+        {
+            options.AddArgument("--headless=chrome");
+            options.AddArgument("--no-sandbox");
+            options.AddArgument("--disable-dev-shm-usage");
+        }
+
+        this.driver = new ChromeDriver(options);
         this.verificationErrors = new StringBuilder();
     }
 
