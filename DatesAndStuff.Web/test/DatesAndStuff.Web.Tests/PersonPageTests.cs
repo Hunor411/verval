@@ -78,7 +78,13 @@ public class PersonPageTests
         {
             var options = new ChromeOptions();
             options.AddArgument("--headless");
-            this.driver = new RemoteWebDriver(new Uri("http://selenium__standalone-chrome:4444/wd/hub"), options);
+            var remoteUrl = Environment.GetEnvironmentVariable("SELENIUM_REMOTE_URL");
+            if (string.IsNullOrWhiteSpace(remoteUrl))
+            {
+                throw new InvalidOperationException("SELENIUM_REMOTE_URL environment variable is not set in CI environment.");
+            }
+
+            this.driver = new RemoteWebDriver(new Uri(remoteUrl), options.ToCapabilities());
         }
         else
         {
