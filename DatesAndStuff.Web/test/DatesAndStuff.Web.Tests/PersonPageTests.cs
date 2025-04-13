@@ -51,7 +51,7 @@ public class PersonPageTests
                     break;
                 }
             }
-            catch (Exception e)
+            catch
             {
                 Thread.Sleep(1000);
             }
@@ -96,6 +96,13 @@ public class PersonPageTests
     private const string BaseUrl = "http://localhost:5091";
     private Process? blazorProcess;
 
+    private const string PersonPageNavigationLocator = "//*[@data-test='PersonPageNavigation']";
+    private const string DisplayedSalaryLocator = "//*[@data-test='DisplayedSalary']";
+    private const string SalaryIncreasePercentageInputLocator = "//*[@data-test='SalaryIncreasePercentageInput']";
+    private const string SalaryIncreaseSubmitButtonLocator = "//*[@data-test='SalaryIncreaseSubmitButton']";
+    private const string SalaryIncreaseValidationMessageLocator = "//*[@data-test='SalaryIncreaseValidationMessage']";
+    private const string SalaryIncreaseValidationMessage2Locator = "//*[@data-test='SalaryIncreaseValidationMessage2']";
+
     [TestCase(5)]
     [TestCase(10)]
     [TestCase(15)]
@@ -107,32 +114,62 @@ public class PersonPageTests
         this.driver.Navigate().GoToUrl(BaseUrl);
 
         var wait = new WebDriverWait(this.driver, TimeSpan.FromSeconds(5));
-        wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[@data-test='PersonPageNavigation']"))).Click();
+        wait.Until(ExpectedConditions.ElementExists(By.XPath(PersonPageNavigationLocator))).Click();
 
-        wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[@data-test='DisplayedSalary']")));
+        wait.Until(ExpectedConditions.ElementExists(By.XPath(DisplayedSalaryLocator)));
         var salaryBefore = double.Parse(
-            this.driver.FindElement(By.XPath("//*[@data-test='DisplayedSalary']")).Text,
+            this.driver.FindElement(By.XPath(DisplayedSalaryLocator)).Text,
             CultureInfo.InvariantCulture
         );
 
-        wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[@data-test='SalaryIncreasePercentageInput']")));
-        var input = this.driver.FindElement(By.XPath("//*[@data-test='SalaryIncreasePercentageInput']"));
+        wait.Until(ExpectedConditions.ElementExists(By.XPath(SalaryIncreasePercentageInputLocator)));
+        var input = this.driver.FindElement(By.XPath(SalaryIncreasePercentageInputLocator));
         input.Clear();
         input.SendKeys(percentage.ToString(CultureInfo.CurrentCulture));
 
         // Act
-        wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[@data-test='SalaryIncreaseSubmitButton']")));
-        var submitButton = this.driver.FindElement(By.XPath("//*[@data-test='SalaryIncreaseSubmitButton']"));
+        wait.Until(ExpectedConditions.ElementExists(By.XPath(SalaryIncreaseSubmitButtonLocator)));
+        var submitButton = this.driver.FindElement(By.XPath(SalaryIncreaseSubmitButtonLocator));
         submitButton.Click();
 
         // Assert
-        wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[@data-test='DisplayedSalary']")));
+        wait.Until(ExpectedConditions.ElementExists(By.XPath(DisplayedSalaryLocator)));
         var salaryAfter = double.Parse(
-            this.driver.FindElement(By.XPath("//*[@data-test='DisplayedSalary']")).Text,
+            this.driver.FindElement(By.XPath(DisplayedSalaryLocator)).Text,
             CultureInfo.InvariantCulture
         );
 
         var expectedSalary = salaryBefore + (salaryBefore * (percentage / 100.0));
         salaryAfter.Should().BeApproximately(expectedSalary, 0.001);
+    }
+
+    [TestCase(-10)]
+    [TestCase(-15)]
+    [TestCase(-20)]
+    [TestCase(-25)]
+    [TestCase(-30)]
+    public void PersonSalaryIncreaseSalaryTooLargeNegativeValueShouldFail(double percentage)
+    {
+        this.driver.Navigate().GoToUrl(BaseUrl);
+
+        var wait = new WebDriverWait(this.driver, TimeSpan.FromSeconds(5));
+        wait.Until(ExpectedConditions.ElementExists(By.XPath(PersonPageNavigationLocator))).Click();
+
+        wait.Until(ExpectedConditions.ElementExists(By.XPath(SalaryIncreasePercentageInputLocator)));
+        var input = this.driver.FindElement(By.XPath(SalaryIncreasePercentageInputLocator));
+        input.Clear();
+        input.SendKeys(percentage.ToString(CultureInfo.CurrentCulture));
+
+        wait.Until(ExpectedConditions.ElementExists(By.XPath(SalaryIncreaseSubmitButtonLocator)));
+        this.driver.FindElement(By.XPath(SalaryIncreaseSubmitButtonLocator)).Click();
+
+        wait.Until(ExpectedConditions.ElementExists(By.XPath(SalaryIncreaseValidationMessageLocator)));
+        wait.Until(ExpectedConditions.ElementExists(By.XPath(SalaryIncreaseValidationMessage2Locator)));
+
+        var salaryAfter = double.Parse(
+            this.driver.FindElement(By.XPath(DisplayedSalaryLocator)).Text,
+            CultureInfo.InvariantCulture
+        );
+        salaryAfter.Should().Be(5000);
     }
 }
