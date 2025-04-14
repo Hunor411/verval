@@ -27,7 +27,8 @@ public class PersonPageTests
         var startInfo = new ProcessStartInfo
         {
             FileName = "dotnet",
-            Arguments = $"run --project \"{webProjectPath}\" --no-launch-profile --urls {BaseUrl}",
+            Arguments = $"run --project \"{webProjectPath}\"",
+            // Arguments = "dotnet run --no-build",
             WorkingDirectory = webProjFolderPath,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
@@ -36,8 +37,8 @@ public class PersonPageTests
 
         this.blazorProcess = Process.Start(startInfo)!;
 
-        this.blazorProcess.OutputDataReceived += (s, e) => Console.WriteLine(e.Data);
-        this.blazorProcess.ErrorDataReceived += (s, e) => Console.Error.WriteLine(e.Data);
+        this.blazorProcess.OutputDataReceived += (s, e) => TestContext.Progress.WriteLine("[stdout] " + e.Data);
+        this.blazorProcess.ErrorDataReceived += (s, e) => TestContext.Progress.WriteLine("[stderr] " + e.Data);
         this.blazorProcess.BeginOutputReadLine();
         this.blazorProcess.BeginErrorReadLine();
 
@@ -62,6 +63,8 @@ public class PersonPageTests
                 Thread.Sleep(1000);
             }
         }
+
+        Assert.Fail($"Blazor server did not start at {BaseUrl} within {timeout.TotalSeconds} seconds.");
     }
 
     [OneTimeTearDown]
@@ -94,6 +97,7 @@ public class PersonPageTests
         else
         {
             var options = new ChromeOptions();
+            options.AddArgument("--headless");
             this.driver = new ChromeDriver(options);
         }
         this.verificationErrors = new StringBuilder();
