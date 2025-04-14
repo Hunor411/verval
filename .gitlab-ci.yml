@@ -15,14 +15,16 @@ build:
 
 test:
   stage: test
-  needs:
-    - build
   image: mcr.microsoft.com/dotnet/sdk:8.0
-  services:
-    - name: selenium/standalone-chrome:122.0
-      alias: selenium
-  variables:
-    SELENIUM_REMOTE_URL: "http://selenium:4444/wd/hub"
+  before_script:
+    - apt-get update && apt-get install -y wget gnupg unzip
+    - wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /usr/share/keyrings/google-chrome.gpg
+    - echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
+    - apt-get update && apt-get install -y google-chrome-stable
+    - wget https://chromedriver.storage.googleapis.com/122.0.6261.69/chromedriver_linux64.zip
+    - unzip chromedriver_linux64.zip
+    - mv chromedriver /usr/local/bin/
+    - chmod +x /usr/local/bin/chromedriver
   script:
     - dotnet test --collect:"XPlat Code Coverage" --logger:"console;verbosity=detailed"
     - dotnet tool install -g dotnet-reportgenerator-globaltool

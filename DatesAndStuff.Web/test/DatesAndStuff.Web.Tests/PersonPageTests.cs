@@ -7,7 +7,6 @@ using System.Text;
 using FluentAssertions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Remote;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
 
@@ -80,27 +79,9 @@ public class PersonPageTests
     [SetUp]
     public void SetupTest()
     {
-        var isCi = Environment.GetEnvironmentVariable("CI") == "true";
-
-        if (isCi)
-        {
-            var options = new ChromeOptions();
-            options.AddArgument("--headless");
-            var remoteUrl = Environment.GetEnvironmentVariable("SELENIUM_REMOTE_URL");
-            if (string.IsNullOrWhiteSpace(remoteUrl))
-            {
-                throw new InvalidOperationException("SELENIUM_REMOTE_URL environment variable is not set in CI environment.");
-            }
-
-            this.driver = new RemoteWebDriver(new Uri(remoteUrl), options.ToCapabilities());
-        }
-        else
-        {
-            var options = new ChromeOptions();
-            options.AddArgument("--headless");
-            this.driver = new ChromeDriver(options);
-        }
-
+        var options = new ChromeOptions();
+        options.AddArgument("--headless");
+        this.driver = new ChromeDriver(options);
         this.verificationErrors = new StringBuilder();
     }
 
@@ -120,7 +101,7 @@ public class PersonPageTests
         Assert.That(this.verificationErrors.ToString(), Is.EqualTo(""));
     }
 
-    private IWebDriver driver;
+    private ChromeDriver driver;
     private StringBuilder verificationErrors;
     private static string BaseUrl = "http://localhost:5091";
     private Process? blazorProcess;
