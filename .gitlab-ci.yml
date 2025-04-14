@@ -19,8 +19,7 @@ test:
     - build
   image: mcr.microsoft.com/dotnet/sdk:8.0
   services:
-    - selenium/standalone-chrome:122.0
-    - name: selenium
+    - name: selenium/standalone-chrome:122.0
       alias: selenium
   variables:
     SELENIUM_REMOTE_URL: "http://selenium:4444/wd/hub"
