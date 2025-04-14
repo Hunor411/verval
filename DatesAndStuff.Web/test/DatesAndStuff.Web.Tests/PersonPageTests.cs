@@ -27,9 +27,8 @@ public class PersonPageTests
         var startInfo = new ProcessStartInfo
         {
             FileName = "dotnet",
-            // Arguments = $"run --project \"{webProjectPath}\"",
+            Arguments = $"run --project \"{webProjectPath}\"",
             // Arguments = "dotnet run --no-build",
-            Arguments = $"run --project \"{webProjectPath}\" --urls=http://0.0.0.0:5091",
             WorkingDirectory = webProjFolderPath,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
@@ -123,7 +122,7 @@ public class PersonPageTests
 
     private IWebDriver driver;
     private StringBuilder verificationErrors;
-    private static string BaseUrl = Environment.GetEnvironmentVariable("TEST_BASE_URL") ?? "http://localhost:5091";
+    private static string BaseUrl = "http://localhost:5091";
     private Process? blazorProcess;
 
     private const string PersonPageNavigationLocator = "//*[@data-test='PersonPageNavigation']";

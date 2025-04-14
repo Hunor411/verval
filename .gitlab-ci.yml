@@ -2,10 +2,6 @@ stages:
   - build
   - test
 
-services:
-  - name: selenium/standalone-chrome:122.0
-    alias: selenium
-
 build:
   stage: build
   image: mcr.microsoft.com/dotnet/sdk:8.0
@@ -22,9 +18,10 @@ test:
   needs:
     - build
   image: mcr.microsoft.com/dotnet/sdk:8.0
+  services:
+    - selenium/standalone-chrome:122.0
   variables:
     SELENIUM_REMOTE_URL: "http://selenium:4444/wd/hub"
-    TEST_BASE_URL: "http://host.docker.internal:5091"
   script:
     - dotnet test --collect:"XPlat Code Coverage" --logger:"console;verbosity=detailed"
     - dotnet tool install -g dotnet-reportgenerator-globaltool
