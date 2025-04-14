@@ -81,6 +81,8 @@ public class PersonPageTests
     {
         var options = new ChromeOptions();
         options.AddArgument("--headless");
+        options.AddArgument("--no-sandbox");
+        options.AddArgument("--disable-dev-shm-usage");
         this.driver = new ChromeDriver(options);
         this.verificationErrors = new StringBuilder();
     }
