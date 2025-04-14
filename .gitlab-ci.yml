@@ -24,7 +24,7 @@ test:
   image: mcr.microsoft.com/dotnet/sdk:8.0
   variables:
     SELENIUM_REMOTE_URL: "http://selenium:4444/wd/hub"
-    TEST_BASE_URL: "http://test:5091"
+    TEST_BASE_URL: "http://host.docker.internal:5091"
   script:
     - dotnet test --collect:"XPlat Code Coverage" --logger:"console;verbosity=detailed"
     - dotnet tool install -g dotnet-reportgenerator-globaltool

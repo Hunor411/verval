@@ -29,7 +29,7 @@ public class PersonPageTests
             FileName = "dotnet",
             // Arguments = $"run --project \"{webProjectPath}\"",
             // Arguments = "dotnet run --no-build",
-            Arguments = $"run --project \"{webProjectPath}\" --urls={BaseUrl}",
+            Arguments = $"run --project \"{webProjectPath}\" --urls=http://0.0.0.0:5091",
             WorkingDirectory = webProjFolderPath,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
