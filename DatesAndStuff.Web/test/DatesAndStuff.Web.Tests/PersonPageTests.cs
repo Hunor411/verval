@@ -163,6 +163,12 @@ public class PersonPageTests
         var wait = new WebDriverWait(this.driver, TimeSpan.FromSeconds(5));
         wait.Until(ExpectedConditions.ElementExists(By.XPath(PersonPageNavigationLocator))).Click();
 
+        wait.Until(ExpectedConditions.ElementExists(By.XPath(DisplayedSalaryLocator)));
+        var initialSalary = double.Parse(
+            this.driver.FindElement(By.XPath(DisplayedSalaryLocator)).Text,
+            CultureInfo.InvariantCulture
+        );
+
         wait.Until(ExpectedConditions.ElementExists(By.XPath(SalaryIncreasePercentageInputLocator)));
         var input = this.driver.FindElement(By.XPath(SalaryIncreasePercentageInputLocator));
         input.Clear();
@@ -178,6 +184,6 @@ public class PersonPageTests
             this.driver.FindElement(By.XPath(DisplayedSalaryLocator)).Text,
             CultureInfo.InvariantCulture
         );
-        salaryAfter.Should().Be(5000);
+        salaryAfter.Should().Be(initialSalary);
     }
 }
