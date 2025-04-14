@@ -15,15 +15,23 @@ build:
 
 test:
   stage: test
+  needs: []
   image: mcr.microsoft.com/dotnet/sdk:8.0
   before_script:
-    - apt-get update && apt-get install -y wget gnupg unzip
+    - apt-get update && apt-get install -y wget gnupg unzip jq
     - wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /usr/share/keyrings/google-chrome.gpg
     - echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
     - apt-get update && apt-get install -y google-chrome-stable
-    - wget https://chromedriver.storage.googleapis.com/122.0.6261.69/chromedriver_linux64.zip
-    - unzip chromedriver_linux64.zip
-    - mv chromedriver /usr/local/bin/
+
+    # Get the version
+    - CHROME_VERSION=$(google-chrome-stable --version | grep -oP '\d+\.\d+\.\d+\.\d+')
+
+    # Get the matching chromedriver URL
+    - CHROMEDRIVER_URL=$(wget -qO- https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json | jq -r '.channels.Stable.downloads.chromedriver[] | select(.platform == "linux64") | .url')
+
+    - wget "$CHROMEDRIVER_URL" -O chromedriver-linux64.zip
+    - unzip chromedriver-linux64.zip
+    - mv chromedriver-linux64/chromedriver /usr/local/bin/
     - chmod +x /usr/local/bin/chromedriver
   script:
     - dotnet test --collect:"XPlat Code Coverage" --logger:"console;verbosity=detailed"
