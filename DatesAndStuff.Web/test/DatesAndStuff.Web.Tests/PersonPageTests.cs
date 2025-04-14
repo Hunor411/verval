@@ -27,8 +27,9 @@ public class PersonPageTests
         var startInfo = new ProcessStartInfo
         {
             FileName = "dotnet",
-            Arguments = $"run --project \"{webProjectPath}\"",
+            // Arguments = $"run --project \"{webProjectPath}\"",
             // Arguments = "dotnet run --no-build",
+            Arguments = $"run --project \"{webProjectPath}\" --urls=http://0.0.0.0:5091",
             WorkingDirectory = webProjFolderPath,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
@@ -100,6 +101,7 @@ public class PersonPageTests
             options.AddArgument("--headless");
             this.driver = new ChromeDriver(options);
         }
+
         this.verificationErrors = new StringBuilder();
     }
 
@@ -121,7 +123,7 @@ public class PersonPageTests
 
     private IWebDriver driver;
     private StringBuilder verificationErrors;
-    private const string BaseUrl = "http://localhost:5091";
+    private static string BaseUrl = Environment.GetEnvironmentVariable("TEST_BASE_URL") ?? "http://localhost:5091";
     private Process? blazorProcess;
 
     private const string PersonPageNavigationLocator = "//*[@data-test='PersonPageNavigation']";
@@ -138,7 +140,6 @@ public class PersonPageTests
     [TestCase(25)]
     public void PersonSalaryIncreaseShouldIncrease(double percentage)
     {
-        // Arrange
         this.driver.Navigate().GoToUrl(BaseUrl);
 
         var wait = new WebDriverWait(this.driver, TimeSpan.FromSeconds(5));
@@ -155,12 +156,9 @@ public class PersonPageTests
         input.Clear();
         input.SendKeys(percentage.ToString(CultureInfo.CurrentCulture));
 
-        // Act
         wait.Until(ExpectedConditions.ElementExists(By.XPath(SalaryIncreaseSubmitButtonLocator)));
-        var submitButton = this.driver.FindElement(By.XPath(SalaryIncreaseSubmitButtonLocator));
-        submitButton.Click();
+        this.driver.FindElement(By.XPath(SalaryIncreaseSubmitButtonLocator)).Click();
 
-        // Assert
         wait.Until(ExpectedConditions.ElementExists(By.XPath(DisplayedSalaryLocator)));
         var salaryAfter = double.Parse(
             this.driver.FindElement(By.XPath(DisplayedSalaryLocator)).Text,
