@@ -46,10 +46,8 @@ public class WizzairPageTests
     private const string OneWayInputLocation = "//*[@id=\"radio-button-id-5\"]";
     private const string OriginInputLocation = "//*[@id=\"wa-autocomplete-input-7\"]";
     private const string DestinationInputLocation = "//*[@id=\"wa-autocomplete-input-9\"]";
-    private const string DateInputLocation = "//*[@id=\"app\"]/div/main/div/div/div[1]/div[1]/div[1]/div[2]/div/div[2]/div/div[1]/form/div/fieldset[2]/div/div[1]/div/input";
-
-    // //*[@id="wa-autocomplete-option-97"]/label/strong
-    // /html/body/div[3]/div/div/div/div/div/label/strong
+    private const string DateInputLocation =
+        "//*[@id=\"app\"]/div/main/div/div/div[1]/div[1]/div[1]/div[2]/div/div[2]/div/div[1]/form/div/fieldset[2]/div/div[1]/div/input";
 
     [Test]
     public void ShouldHaveAtLeastTwoFlightsBetweenVasarhelyAndBudapestNextWeek()
@@ -76,18 +74,16 @@ public class WizzairPageTests
         var dateInput = wait.Until(ExpectedConditions.ElementExists(By.XPath(DateInputLocation)));
         dateInput.Click();
 
-        var nextWeekStart = DateTime.Today.AddDays(7).Day;
-        var nextWeekEnd = DateTime.Today.AddDays(13).Day;
-
-        wait.Until(d =>
-            d.FindElements(By.XPath("//span[contains(@class, 'vc-day-content') and not(contains(@class, 'is-disabled'))]"))
-                .Count > 0);
+        var today = DateTime.Today;
+        var dayUntilNextMonday = (DayOfWeek.Monday - today.DayOfWeek + 7) % 7;
+        var nextWeekStart = today.AddDays(dayUntilNextMonday);
+        var nextWeekEnd = nextWeekStart.AddDays(6);
 
         var days = this.driver.FindElements(
             By.XPath("//span[contains(@class, 'vc-day-content') and not(contains(@class, 'is-disabled'))]"));
 
         var nextWeekDates = days
-            .Where(e => int.TryParse(e.Text, out var day) && day >= nextWeekStart && day <= nextWeekEnd)
+            .Where(e => int.TryParse(e.Text, out var day) && day >= nextWeekStart.Day && day <= nextWeekEnd.Day)
             .ToList();
 
         nextWeekDates.Count.Should().BeGreaterOrEqualTo(2,
