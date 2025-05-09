@@ -1,13 +1,12 @@
-﻿using System.Globalization;
+﻿namespace DatesAndStuff.Mobile;
 
-namespace DatesAndStuff.Mobile
+using System.Globalization;
+
+public class InverseBoolConverter : IValueConverter
 {
-    public class InverseBoolConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
-            value is bool b ? !b : false;
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
+        value is bool b ? !b : false;
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
-            throw new NotImplementedException();
-    }
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
+        throw new NotImplementedException();
 }

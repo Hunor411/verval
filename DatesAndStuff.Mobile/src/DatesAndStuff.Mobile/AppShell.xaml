@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
+
 <Shell
     x:Class="DatesAndStuff.Mobile.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -7,8 +8,8 @@
     Title="DatesAndStuff.Mobile">
 
     <FlyoutItem Title="Home" Icon="house_door_fill.png">
-        <ShellContent  ContentTemplate="{DataTemplate local:MainPage}"
- Route="MainPage" />
+        <ShellContent ContentTemplate="{DataTemplate local:MainPage}"
+                      Route="MainPage" />
     </FlyoutItem>
 
     <FlyoutItem Title="Counter" Icon="plus_square_fill.png">

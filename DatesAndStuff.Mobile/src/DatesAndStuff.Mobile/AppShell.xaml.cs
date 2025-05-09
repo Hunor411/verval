@@ -1,10 +1,6 @@
-﻿namespace DatesAndStuff.Mobile
+﻿namespace DatesAndStuff.Mobile;
+
+public partial class AppShell : Shell
 {
-    public partial class AppShell : Shell
-    {
-        public AppShell()
-        {
-            InitializeComponent();
-        }
-    }
+    public AppShell() => this.InitializeComponent();
 }

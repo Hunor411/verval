@@ -2,10 +2,10 @@ namespace DatesAndStuff.Mobile;
 
 public partial class SimulationTimePage : ContentPage
 {
-	public SimulationTimePage()
-	{
-		InitializeComponent();
+    public SimulationTimePage()
+    {
+        this.InitializeComponent();
 
-		TimeLabel.Text = $"Time: {new SimulationTime(DateTime.Now)}";
-	}
+        this.TimeLabel.Text = $"Time: {new SimulationTime(DateTime.Now)}";
+    }
 }

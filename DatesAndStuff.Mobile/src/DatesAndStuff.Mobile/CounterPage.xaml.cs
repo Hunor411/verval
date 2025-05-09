@@ -2,19 +2,16 @@ namespace DatesAndStuff.Mobile;
 
 public partial class CounterPage : ContentPage
 {
-    int count = 0;
+    private int count;
 
-    public CounterPage()
-	{
-        InitializeComponent();
-	}
+    public CounterPage() => this.InitializeComponent();
 
     private void OnCounterClicked(object sender, EventArgs e)
     {
-        count++;
+        this.count++;
 
-        CurrentCountLabel.Text = $"Current count: {count}";
+        this.CurrentCountLabel.Text = $"Current count: {this.count}";
 
-        SemanticScreenReader.Announce(CurrentCountLabel.Text);
+        SemanticScreenReader.Announce(this.CurrentCountLabel.Text);
     }
 }

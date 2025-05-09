@@ -1,12 +1,11 @@
-﻿namespace DatesAndStuff.Mobile
-{
-    public partial class App : Application
-    {
-        public App()
-        {
-            InitializeComponent();
+﻿namespace DatesAndStuff.Mobile;
 
-            MainPage = new AppShell();
-        }
+public partial class App : Application
+{
+    public App()
+    {
+        this.InitializeComponent();
+
+        this.MainPage = new AppShell();
     }
 }

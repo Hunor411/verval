@@ -4,7 +4,7 @@ public partial class PersonPage : ContentPage
 {
     public PersonPage()
     {
-        InitializeComponent();
+        this.InitializeComponent();
 
         this.BindingContext = new PersonViewModel();
     }

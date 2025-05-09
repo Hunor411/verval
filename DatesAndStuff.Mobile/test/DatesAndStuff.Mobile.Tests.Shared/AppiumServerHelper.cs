@@ -1,13 +1,12 @@
-﻿using OpenQA.Selenium.Appium.Service;
+﻿namespace DatesAndStuff.Mobile.Tests;
 
-namespace DatesAndStuff.Mobile.Tests;
+using OpenQA.Selenium.Appium.Service;
 
 public static class AppiumServerHelper
 {
-    private static AppiumLocalService? _appiumLocalService;
-
     public const string DefaultHostAddress = "127.0.0.1";
     public const int DefaultHostPort = 4723;
+    private static AppiumLocalService? _appiumLocalService;
 
     public static void StartAppiumLocalServer(string host = DefaultHostAddress,
         int port = DefaultHostPort)
@@ -26,8 +25,5 @@ public static class AppiumServerHelper
         _appiumLocalService.Start();
     }
 
-    public static void DisposeAppiumLocalServer()
-    {
-        _appiumLocalService?.Dispose();
-    }
+    public static void DisposeAppiumLocalServer() => _appiumLocalService?.Dispose();
 }

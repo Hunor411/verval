@@ -1,14 +1,14 @@
-﻿using OpenQA.Selenium.Appium;
-using OpenQA.Selenium.Appium.Windows;
+﻿namespace DatesAndStuff.Mobile.Tests;
 
-namespace DatesAndStuff.Mobile.Tests;
+using OpenQA.Selenium.Appium;
+using OpenQA.Selenium.Appium.Windows;
 
 public abstract class BaseTest
 {
-    protected AppiumDriver App => AppiumSetup.App;
+    protected static AppiumDriver App => AppiumSetup.App;
 
     // This could also be an extension method to AppiumDriver if you prefer
-    protected AppiumElement FindUIElement(string id)
+    protected static AppiumElement FindUIElement(string id)
     {
         if (App is WindowsDriver)
         {

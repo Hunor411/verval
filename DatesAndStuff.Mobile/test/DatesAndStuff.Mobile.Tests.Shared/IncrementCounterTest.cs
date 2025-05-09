@@ -1,40 +1,46 @@
-﻿using FluentAssertions;
-using OpenQA.Selenium.Appium;
+﻿namespace DatesAndStuff.Mobile.Tests;
 
-namespace DatesAndStuff.Mobile.Tests
+using FluentAssertions;
+using OpenQA.Selenium;
+
+internal sealed class IncrementCounterTest : BaseTest
 {
-    internal class IncrementCounterTest:BaseTest
+    [Test]
+    public void ClickCounterTest()
     {
-        [Test]
-        public void ClickCounterTest()
+        // Arrange
+
+        // navigate to the counter page
+        var drawer =
+            App.FindElement(By.XPath("//android.widget.ImageButton[@content-desc=\"Open navigation drawer\"]"));
+        drawer.Click();
+        var counterMenu = App.FindElement(By.XPath("//android.widget.TextView[@text=\"Counter\"]"));
+        counterMenu.Click();
+
+        // check the current count
+        var currentCountTextView = FindUIElement("CounterNumberLabel");
+        var originalCount = 0;
+        var currentCountValue = currentCountTextView.Text.Substring(currentCountTextView.Text.IndexOf(':') + 1);
+        if (!int.TryParse(currentCountValue, out originalCount))
         {
-            // Arrange
-
-            // navigate to the counter page
-            var drawer = App.FindElement(MobileBy.XPath("//android.widget.ImageButton[@content-desc=\"Open navigation drawer\"]"));
-            drawer.Click();
-            var counterMenu = App.FindElement(MobileBy.XPath("//android.widget.TextView[@text=\"Counter\"]"));
-            counterMenu.Click();
-
-            // check the current count
-            var currentCountTextView = FindUIElement("CounterNumberLabel");
-            int originalCount = 0;
-            string currentCountValue = currentCountTextView.Text.Substring(currentCountTextView.Text.IndexOf(':') + 1);
-            int.TryParse(currentCountValue, out originalCount);
-
-            var buttonToClick = FindUIElement("CounterIncreaseBtn");
-
-            // Act
-            buttonToClick.Click();
-            //Task.Delay(500).Wait(); // Wait for the click to register and show up on the screenshot
-
-            // Assert
-            currentCountValue = currentCountTextView.Text.Substring(currentCountTextView.Text.IndexOf(':') + 1);
-            int updatedCount = 0;
-            int.TryParse(currentCountValue, out updatedCount);
-
-            // Assert
-            updatedCount.Should().Be(originalCount + 1);
+            Assert.Fail($"Failed to parse current count value: '{currentCountValue}'");
         }
+
+        var buttonToClick = FindUIElement("CounterIncreaseBtn");
+
+        // Act
+        buttonToClick.Click();
+        //Task.Delay(500).Wait(); // Wait for the click to register and show up on the screenshot
+
+        // Assert
+        currentCountValue = currentCountTextView.Text.Substring(currentCountTextView.Text.IndexOf(':') + 1);
+        var updatedCount = 0;
+        if (!int.TryParse(currentCountValue, out updatedCount))
+        {
+            Assert.Fail($"Failed to parse current count value: '{updatedCount}'");
+        }
+
+        // Assert
+        updatedCount.Should().Be(originalCount + 1);
     }
 }

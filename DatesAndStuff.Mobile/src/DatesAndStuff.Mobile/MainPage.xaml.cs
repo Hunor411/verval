@@ -1,11 +1,6 @@
-﻿namespace DatesAndStuff.Mobile
-{
-    public partial class MainPage : ContentPage
-    {
-        public MainPage()
-        {
-            InitializeComponent();
-        }
-    }
+﻿namespace DatesAndStuff.Mobile;
 
+public partial class MainPage : ContentPage
+{
+    public MainPage() => this.InitializeComponent();
 }
