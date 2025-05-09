@@ -23,6 +23,7 @@
 
             <Label Text="Salary:" FontSize="18" />
             <Label Text="{Binding Person.Salary}"
+                   AutomationId="PersonSalaryText"
                    x:Name="DisplayedSalary"
                    FontSize="18"
                    TextColor="DarkGreen" />
@@ -31,6 +32,7 @@
             <Entry Placeholder="Enter a percentage value"
                    Keyboard="Numeric"
                    Text="{Binding SalaryIncreasePercentage, Mode=TwoWay}"
+                   AutomationId="PersonSalaryInput"
                    x:Name="SalaryIncreasePercentageInput" />
             <Label Text="{Binding SalaryIncreasePercentageValidationMessage}"
                    TextColor="Red"
@@ -38,6 +40,7 @@
 
             <Button Text="Submit"
                     Command="{Binding SubmitCommand}"
+                    AutomationId="PersonSalaryInputSubmit"
                     x:Name="SalaryIncreaseSubmitButton"
                     BackgroundColor="CornflowerBlue"
                     TextColor="White"
