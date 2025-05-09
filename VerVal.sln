@@ -11,6 +11,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatesAndStuff.Web", "DatesA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatesAndStuff.Web.Tests", "DatesAndStuff.Web\test\DatesAndStuff.Web.Tests\DatesAndStuff.Web.Tests.csproj", "{522D5833-C0D5-4CEC-87E5-6403C26BF16D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatesAndStuff.Mobile", "DatesAndStuff.Mobile\src\DatesAndStuff.Mobile\DatesAndStuff.Mobile.csproj", "{3AED6208-D756-479D-9A7A-90EF6F08E092}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatesAndStuff.Mobile.Tests.Android", "DatesAndStuff.Mobile\test\DatesAndStuff.Mobile.Tests.Android\DatesAndStuff.Mobile.Tests.Android.csproj", "{7C586F73-6806-40EA-B64D-6DB4954B9362}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatesAndStuff.Mobile.Tests.Shared", "DatesAndStuff.Mobile\test\DatesAndStuff.Mobile.Tests.Shared\DatesAndStuff.Mobile.Tests.Shared.csproj", "{21B97BC6-C8FE-4611-9245-A55B3C434490}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +39,18 @@ Global
 		{522D5833-C0D5-4CEC-87E5-6403C26BF16D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{522D5833-C0D5-4CEC-87E5-6403C26BF16D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{522D5833-C0D5-4CEC-87E5-6403C26BF16D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AED6208-D756-479D-9A7A-90EF6F08E092}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AED6208-D756-479D-9A7A-90EF6F08E092}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AED6208-D756-479D-9A7A-90EF6F08E092}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AED6208-D756-479D-9A7A-90EF6F08E092}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C586F73-6806-40EA-B64D-6DB4954B9362}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C586F73-6806-40EA-B64D-6DB4954B9362}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C586F73-6806-40EA-B64D-6DB4954B9362}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C586F73-6806-40EA-B64D-6DB4954B9362}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21B97BC6-C8FE-4611-9245-A55B3C434490}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21B97BC6-C8FE-4611-9245-A55B3C434490}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21B97BC6-C8FE-4611-9245-A55B3C434490}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21B97BC6-C8FE-4611-9245-A55B3C434490}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
