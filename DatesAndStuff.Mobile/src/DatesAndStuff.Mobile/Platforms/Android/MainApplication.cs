@@ -3,6 +3,10 @@ using Android.Runtime;
 
 namespace DatesAndStuff.Mobile
 {
+    using System;
+    using Microsoft.Maui;
+    using Microsoft.Maui.Hosting;
+
     [Application]
     public class MainApplication : MauiApplication
     {

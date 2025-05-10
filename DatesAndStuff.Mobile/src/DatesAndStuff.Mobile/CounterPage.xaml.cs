@@ -1,5 +1,9 @@
 namespace DatesAndStuff.Mobile;
 
+using System;
+using Microsoft.Maui.Accessibility;
+using Microsoft.Maui.Controls;
+
 public partial class CounterPage : ContentPage
 {
     private int count;
