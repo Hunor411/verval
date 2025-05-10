@@ -36,7 +36,8 @@
                    x:Name="SalaryIncreasePercentageInput" />
             <Label Text="{Binding SalaryIncreasePercentageValidationMessage}"
                    TextColor="Red"
-                   IsVisible="{Binding HasValidationErrors}" />
+                   IsVisible="{Binding HasValidationErrors}"
+                   AutomationId="PersonSalaryValidationMessage"/>
 
             <Button Text="Submit"
                     Command="{Binding SubmitCommand}"
