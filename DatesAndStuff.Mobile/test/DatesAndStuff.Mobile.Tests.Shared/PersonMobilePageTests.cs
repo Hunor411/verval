@@ -8,6 +8,12 @@ using OpenQA.Selenium.Support.UI;
 [TestFixture]
 public class PersonMobilePageTests : BaseTest
 {
+    [OneTimeSetUp]
+    public void InitOnce() => AppiumSetup.RunBeforeAnyTests();
+
+    [OneTimeTearDown]
+    public void CleanupOnce() => AppiumSetup.RunBeforeAnyTests();
+
     private const string NavDrawerButtonXPath =
         "//android.widget.ImageButton[@content-desc=\"Open navigation drawer\"]";
 
@@ -28,16 +34,16 @@ public class PersonMobilePageTests : BaseTest
         App.FindElement(By.XPath(PersonMenuItemXPath)).Click();
 
         var wait = new WebDriverWait(App, TimeSpan.FromSeconds(5));
-        var originalSalaryElement = wait.Until(_ => FindUIElement(SalaryTextId));
+        var originalSalaryElement = wait.Until(_ => FindUiElement(SalaryTextId));
         var originalSalary = double.Parse(originalSalaryElement.Text, CultureInfo.InvariantCulture);
 
-        var personSalaryInput = wait.Until(_ => FindUIElement(SalaryInputId));
+        var personSalaryInput = wait.Until(_ => FindUiElement(SalaryInputId));
         personSalaryInput.Clear();
         personSalaryInput.SendKeys(percentage.ToString(CultureInfo.InvariantCulture));
 
-        FindUIElement(SubmitButtonId).Click();
+        FindUiElement(SubmitButtonId).Click();
 
-        var newSalaryElement = wait.Until(_ => FindUIElement(SalaryTextId));
+        var newSalaryElement = wait.Until(_ => FindUiElement(SalaryTextId));
         var newSalary = double.Parse(newSalaryElement.Text, CultureInfo.InvariantCulture);
 
         var expectedSalary = originalSalary * (1 + (percentage / 100));
@@ -55,16 +61,16 @@ public class PersonMobilePageTests : BaseTest
         App.FindElement(By.XPath(PersonMenuItemXPath)).Click();
 
         var wait = new WebDriverWait(App, TimeSpan.FromSeconds(5));
-        var originalSalaryElement = wait.Until(_ => FindUIElement(SalaryTextId));
+        var originalSalaryElement = wait.Until(_ => FindUiElement(SalaryTextId));
         var originalSalary = double.Parse(originalSalaryElement.Text, CultureInfo.InvariantCulture);
 
-        var personSalaryInput = wait.Until(_ => FindUIElement(SalaryInputId));
+        var personSalaryInput = wait.Until(_ => FindUiElement(SalaryInputId));
         personSalaryInput.Clear();
         personSalaryInput.SendKeys(percentage.ToString(CultureInfo.InvariantCulture));
 
-        FindUIElement(SubmitButtonId).Click();
+        FindUiElement(SubmitButtonId).Click();
 
-        var newSalaryElement = wait.Until(_ => FindUIElement(SalaryTextId));
+        var newSalaryElement = wait.Until(_ => FindUiElement(SalaryTextId));
         var newSalary = double.Parse(newSalaryElement.Text, CultureInfo.InvariantCulture);
 
         var expectedSalary = originalSalary * (1 + (percentage / 100));
@@ -82,18 +88,18 @@ public class PersonMobilePageTests : BaseTest
         App.FindElement(By.XPath(PersonMenuItemXPath)).Click();
 
         var wait = new WebDriverWait(App, TimeSpan.FromSeconds(5));
-        var originalSalaryElement = wait.Until(_ => FindUIElement(SalaryTextId));
+        var originalSalaryElement = wait.Until(_ => FindUiElement(SalaryTextId));
         var originalSalary = double.Parse(originalSalaryElement.Text, CultureInfo.InvariantCulture);
 
-        var personSalaryInput = wait.Until(_ => FindUIElement(SalaryInputId));
+        var personSalaryInput = wait.Until(_ => FindUiElement(SalaryInputId));
         personSalaryInput.Clear();
         personSalaryInput.SendKeys(percentage.ToString(CultureInfo.InvariantCulture));
 
-        FindUIElement(SubmitButtonId).Click();
-        var errorMessageElement = wait.Until(_ => FindUIElement(SalaryIncreaseErrorMessageId));
+        FindUiElement(SubmitButtonId).Click();
+        var errorMessageElement = wait.Until(_ => FindUiElement(SalaryIncreaseErrorMessageId));
         errorMessageElement.Displayed.Should().BeTrue();
 
-        var newSalaryElement = wait.Until(_ => FindUIElement(SalaryTextId));
+        var newSalaryElement = wait.Until(_ => FindUiElement(SalaryTextId));
         var newSalary = double.Parse(newSalaryElement.Text, CultureInfo.InvariantCulture);
         newSalary.Should().Be(originalSalary);
     }

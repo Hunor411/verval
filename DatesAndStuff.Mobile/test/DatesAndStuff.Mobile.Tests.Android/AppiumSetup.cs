@@ -4,16 +4,14 @@ using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Android;
 using OpenQA.Selenium.Appium.Enums;
 
-[SetUpFixture]
-public class AppiumSetup
+public static class AppiumSetup
 {
     private static AppiumDriver? driver;
 
     public static AppiumDriver App =>
         driver ?? throw new InvalidOperationException("AppiumDriver has not been initialized.");
 
-    [OneTimeSetUp]
-    public void RunBeforeAnyTests()
+    public static void RunBeforeAnyTests()
     {
         // If you started an Appium server manually, make sure to comment out the next line
         // This line starts a local Appium server for you as part of the test run
@@ -41,6 +39,7 @@ public class AppiumSetup
         // https://learn.microsoft.com/xamarin/android/deploy-test/building-apps/build-process#fast-deployment
         androidOptions.AddAdditionalAppiumOption(MobileCapabilityType.NoReset, "true");
         androidOptions.AddAdditionalAppiumOption(AndroidMobileCapabilityType.AppPackage, "com.BBTE.VerVal");
+        androidOptions.AddAdditionalAppiumOption("newCommandTimeout", 300);
 
         //Make sure to set [Register("com.companyname.basicappiumsample.MainActivity")] on the MainActivity of your android application
         androidOptions.AddAdditionalAppiumOption(AndroidMobileCapabilityType.AppActivity,
@@ -57,8 +56,7 @@ public class AppiumSetup
         driver = new AndroidDriver(androidOptions);
     }
 
-    [OneTimeTearDown]
-    public void RunAfterAnyTests()
+    public static void RunAfterAnyTests()
     {
         driver?.Quit();
         driver?.Dispose();

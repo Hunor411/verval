@@ -5,6 +5,12 @@ using OpenQA.Selenium;
 
 internal sealed class IncrementCounterTest : BaseTest
 {
+    [OneTimeSetUp]
+    public void InitOnce() => AppiumSetup.RunBeforeAnyTests();
+
+    [OneTimeTearDown]
+    public void CleanupOnce() => AppiumSetup.RunBeforeAnyTests();
+
     [Test]
     public void ClickCounterTest()
     {
@@ -18,7 +24,7 @@ internal sealed class IncrementCounterTest : BaseTest
         counterMenu.Click();
 
         // check the current count
-        var currentCountTextView = FindUIElement("CounterNumberLabel");
+        var currentCountTextView = FindUiElement("CounterNumberLabel");
         var originalCount = 0;
         var currentCountValue = currentCountTextView.Text.Substring(currentCountTextView.Text.IndexOf(':') + 1);
         if (!int.TryParse(currentCountValue, out originalCount))
@@ -26,7 +32,7 @@ internal sealed class IncrementCounterTest : BaseTest
             Assert.Fail($"Failed to parse current count value: '{currentCountValue}'");
         }
 
-        var buttonToClick = FindUIElement("CounterIncreaseBtn");
+        var buttonToClick = FindUiElement("CounterIncreaseBtn");
 
         // Act
         buttonToClick.Click();

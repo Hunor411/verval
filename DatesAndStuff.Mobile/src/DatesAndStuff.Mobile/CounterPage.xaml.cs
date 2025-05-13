@@ -8,7 +8,11 @@ public partial class CounterPage : ContentPage
 {
     private int count;
 
-    public CounterPage() => this.InitializeComponent();
+    public CounterPage()
+    {
+        this.InitializeComponent();
+        this.CurrentCountLabel.Text = $"Current count: {this.count}";
+    }
 
     private void OnCounterClicked(object sender, EventArgs e)
     {

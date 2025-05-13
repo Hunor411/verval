@@ -8,7 +8,7 @@ public abstract class BaseTest
     protected static AppiumDriver App => AppiumSetup.App;
 
     // This could also be an extension method to AppiumDriver if you prefer
-    protected static AppiumElement FindUIElement(string id)
+    protected static AppiumElement FindUiElement(string id)
     {
         if (App is WindowsDriver)
         {
