@@ -1,7 +1,6 @@
 stages:
   - build
   - test
-  - bdd
 
 build:
   stage: build
@@ -20,29 +19,17 @@ test:
     - build
   image: mcr.microsoft.com/dotnet/sdk:8.0
   script:
-    - dotnet test DatesAndStuff/test/DatesAndStuff.Tests/DatesAndStuff.Tests.csproj --collect="XPlat Code Coverage"
+    - dotnet test TestsOnly.sln --no-build --configuration Debug --logger:"trx;LogFileName=TestResults.trx" --collect:"XPlat Code Coverage"
     - dotnet tool install -g dotnet-reportgenerator-globaltool
+    - dotnet tool install -g SpecFlow.Plus.LivingDoc.CLI
     - export PATH="$PATH:/root/.dotnet/tools"
     - reportgenerator -reports:"**/coverage.cobertura.xml" -targetdir:"coverage-report" -reporttypes:"Html"
+    - livingdoc test-assembly "DatesAndStuff/test/DatesAndStuff.BehaviourTests/bin/Debug/net8.0/DatesAndStuff.BehaviourTests.dll" -t "TestResults.trx" --output "LivingDoc.html"
   artifacts:
     when: always
     paths:
       - coverage-report/
-    expire_in: 1 week
-
-bdd-test:
-  stage: bdd
-  needs:
-    - test
-  image: mcr.microsoft.com/dotnet/sdk:8.0
-  script:
-    - dotnet test DatesAndStuff/test/DatesAndStuff.BehaviourTests/DatesAndStuff.BehaviourTests.csproj
-    - dotnet tool install --global SpecFlow.Plus.LivingDoc.CLI
-    - export PATH="$PATH:/root/.dotnet/tools"
-    - livingdoc test-assembly "DatesAndStuff/test/DatesAndStuff.BehaviourTests/bin/Debug/net8.0/DatesAndStuff.BehaviourTests.dll" -t "DatesAndStuff/test/DatesAndStuff.BehaviourTests/bin/Debug/net8.0/TestExecution.json" --output "DatesAndStuff/test/DatesAndStuff.BehaviourTests/bin/Debug/net8.0/LivingDoc.html"
-  artifacts:
-    when: always
-    paths:
-      - DatesAndStuff/test/DatesAndStuff.BehaviourTests/bin/Debug/net8.0/TestExecution.json
-      - DatesAndStuff/test/DatesAndStuff.BehaviourTests/bin/Debug/net8.0/LivingDoc.html
+      - '**/coverage.cobertura.xml'
+      - TestResults.trx
+      - LivingDoc.html
     expire_in: 1 week
