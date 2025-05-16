@@ -1,5 +1,7 @@
 stages:
   - build
+  - test
+  - bdd
 
 build:
   stage: build
@@ -11,3 +13,42 @@ build:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
       - ~/.nuget/packages/
+
+test:
+  stage: test
+  needs:
+    - build
+  image: mcr.microsoft.com/dotnet/sdk:8.0
+  script:
+    - dotnet test DatesAndStuff/test/DatesAndStuff.Tests/DatesAndStuff.Tests.csproj \
+      /p:CollectCoverage=true \
+      /p:CoverletOutputFormat=opencover \
+      /p:CoverletOutput=TestResults/coverage.xml
+    - dotnet tool install -g dotnet-reportgenerator-globaltool
+    - export PATH="$PATH:/root/.dotnet/tools"
+    - reportgenerator -reports:"**/coverage.cobertura.xml" -targetdir:"coverage-report" -reporttypes:"Html"
+  artifacts:
+    when: always
+    paths:
+      - coverage-report/
+      - '**/coverage.cobertura.xml'
+    expire_in: 1 week
+
+bdd-test:
+  stage: bdd
+  needs:
+    - test
+  image: mcr.microsoft.com/dotnet/sdk:8.0
+  script:
+    - dotnet test DatesAndStuff/test/DatesAndStuff.BehaviourTests/DatesAndStuff.BehaviourTests.csproj
+    - dotnet tool install --global SpecFlow.Plus.LivingDoc.CLI
+    - export PATH="$PATH:/root/.dotnet/tools"
+    - livingdoc test-assembly "DatesAndStuff/test/DatesAndStuff.BehaviourTests/bin/Debug/net8.0/DatesAndStuff.BehaviourTests.dll" \
+      -t "DatesAndStuff/test/DatesAndStuff.BehaviourTests/bin/Debug/net8.0/TestExecution.json" \
+      --output "DatesAndStuff/test/DatesAndStuff.BehaviourTests/bin/Debug/net8.0/LivingDoc.html"
+  artifacts:
+    when: always
+    paths:
+      - DatesAndStuff/test/DatesAndStuff.BehaviourTests/bin/Debug/net8.0/TestExecution.json
+      - DatesAndStuff/test/DatesAndStuff.BehaviourTests/bin/Debug/net8.0/LivingDoc.html
+    expire_in: 1 week
