@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatesAndStuff.Mobile.Tests.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatesAndStuff.Mobile.Tests.Shared", "DatesAndStuff.Mobile\test\DatesAndStuff.Mobile.Tests.Shared\DatesAndStuff.Mobile.Tests.Shared.csproj", "{21B97BC6-C8FE-4611-9245-A55B3C434490}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatesAndStuff.BehaviourTests", "DatesAndStuff\test\DatesAndStuff.BehaviourTests\DatesAndStuff.BehaviourTests.csproj", "{EDB6F675-E714-42DE-B7FD-6E2CC5B843B3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{21B97BC6-C8FE-4611-9245-A55B3C434490}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21B97BC6-C8FE-4611-9245-A55B3C434490}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21B97BC6-C8FE-4611-9245-A55B3C434490}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDB6F675-E714-42DE-B7FD-6E2CC5B843B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDB6F675-E714-42DE-B7FD-6E2CC5B843B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDB6F675-E714-42DE-B7FD-6E2CC5B843B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDB6F675-E714-42DE-B7FD-6E2CC5B843B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
