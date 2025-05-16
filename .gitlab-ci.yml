@@ -29,7 +29,5 @@ test:
     when: always
     paths:
       - coverage-report/
-      - '**/coverage.cobertura.xml'
-      - TestResults.trx
-      - LivingDoc.html
+      - DatesAndStuff/test/DatesAndStuff.BehaviourTests/bin/Debug/net8.0/LivingDoc.html
     expire_in: 1 week
