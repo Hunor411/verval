@@ -7,8 +7,8 @@ build:
   stage: build
   image: mcr.microsoft.com/dotnet/sdk:8.0
   script:
-    - dotnet restore
-    - dotnet build --no-restore --configuration Release
+    - dotnet restore TestsOnly.sln
+    - dotnet build TestsOnly.sln
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
