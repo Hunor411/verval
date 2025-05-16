@@ -24,7 +24,7 @@ test:
     - dotnet tool install -g SpecFlow.Plus.LivingDoc.CLI
     - export PATH="$PATH:/root/.dotnet/tools"
     - reportgenerator -reports:"**/coverage.cobertura.xml" -targetdir:"coverage-report" -reporttypes:"Html"
-    - livingdoc test-assembly "DatesAndStuff/test/DatesAndStuff.BehaviourTests/bin/Debug/net8.0/DatesAndStuff.BehaviourTests.dll" -t "TestResults.trx" --output "LivingDoc.html"
+    - livingdoc test-assembly "DatesAndStuff\test\DatesAndStuff.BehaviourTests\bin\Debug\net8.0\DatesAndStuff.BehaviourTests.dll" -t "DatesAndStuff\test\DatesAndStuff.BehaviourTests\bin\Debug\net8.0\TestExecution.json" --output "DatesAndStuff\test\DatesAndStuff.BehaviourTests\bin\Debug\net8.0\LivingDoc.html"
   artifacts:
     when: always
     paths:
