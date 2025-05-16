@@ -61,6 +61,8 @@ public class EmagTests
 
     private const string SkipTutorial = "//android.view.View[@resource-id=\"ro.emag.android:id/clippingView\"]";
 
+    private const string VideoFilePath = "/Users/deakhunor/Desktop/Huni/Egyetem/verval/labor/emag_test_video.mp4";
+
     private void TryClickIfExists(WebDriverWait wait, By by)
     {
         try
@@ -78,22 +80,33 @@ public class EmagTests
     public void ShouldAddProductToCartSuccessfully()
     {
         var wait = new WebDriverWait(this.emagApp, TimeSpan.FromSeconds(10));
-        this.TryClickIfExists(wait, By.XPath(SkipTutorial));
-        this.TryClickIfExists(wait, By.XPath(AcceptCookieButton));
-        this.TryClickIfExists(wait, By.XPath(AcceptYear));
 
-        var fakeSearchInput = wait.Until(_ =>
-            this.emagApp.FindElement(By.XPath(FakeSearchInput)));
-        fakeSearchInput.Click();
+        this.emagApp.StartRecordingScreen();
 
-        var searchInput = wait.Until(_ =>
-            this.emagApp.FindElement(By.XPath(SearchInput)));
-        searchInput.Clear();
-        searchInput.SendKeys("Apple macbook pro");
+        try
+        {
+            this.TryClickIfExists(wait, By.XPath(SkipTutorial));
+            this.TryClickIfExists(wait, By.XPath(AcceptCookieButton));
+            this.TryClickIfExists(wait, By.XPath(AcceptYear));
 
-        wait.Until(_ => this.emagApp.FindElement(By.XPath(FirstResult))).Click();
-        wait.Until(_ => this.emagApp.FindElement(By.XPath(FirstItem))).Click();
-        this.emagApp.FindElement(By.XPath(CartNavButton)).Click();
-        wait.Until(_ => this.emagApp.FindElement(By.XPath(CartContinueBtn))).Click();
+            var fakeSearchInput = wait.Until(_ =>
+                this.emagApp.FindElement(By.XPath(FakeSearchInput)));
+            fakeSearchInput.Click();
+
+            var searchInput = wait.Until(_ =>
+                this.emagApp.FindElement(By.XPath(SearchInput)));
+            searchInput.Clear();
+            searchInput.SendKeys("Apple macbook pro");
+
+            wait.Until(_ => this.emagApp.FindElement(By.XPath(FirstResult))).Click();
+            wait.Until(_ => this.emagApp.FindElement(By.XPath(FirstItem))).Click();
+            this.emagApp.FindElement(By.XPath(CartNavButton)).Click();
+            wait.Until(_ => this.emagApp.FindElement(By.XPath(CartContinueBtn))).Click();
+        }
+        finally
+        {
+            var base64Video = this.emagApp.StopRecordingScreen();
+            File.WriteAllBytes(VideoFilePath, Convert.FromBase64String(base64Video));
+        }
     }
 }
