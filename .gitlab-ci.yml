@@ -19,7 +19,7 @@ test:
     - build
   image: mcr.microsoft.com/dotnet/sdk:8.0
   script:
-    - dotnet test TestsOnly.sln --no-build --collect:"XPlat Code Coverage"
+    - dotnet test TestsOnly.sln --collect:"XPlat Code Coverage"
     - dotnet tool install -g dotnet-reportgenerator-globaltool
     - dotnet tool install -g SpecFlow.Plus.LivingDoc.CLI
     - export PATH="$PATH:/root/.dotnet/tools"
