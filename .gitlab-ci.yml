@@ -39,9 +39,7 @@ bdd-test:
     - dotnet test DatesAndStuff/test/DatesAndStuff.BehaviourTests/DatesAndStuff.BehaviourTests.csproj
     - dotnet tool install --global SpecFlow.Plus.LivingDoc.CLI
     - export PATH="$PATH:/root/.dotnet/tools"
-    - livingdoc test-assembly "DatesAndStuff/test/DatesAndStuff.BehaviourTests/bin/Debug/net8.0/DatesAndStuff.BehaviourTests.dll" \
-      -t "DatesAndStuff/test/DatesAndStuff.BehaviourTests/bin/Debug/net8.0/TestExecution.json" \
-      --output "DatesAndStuff/test/DatesAndStuff.BehaviourTests/bin/Debug/net8.0/LivingDoc.html"
+    - livingdoc test-assembly "DatesAndStuff/test/DatesAndStuff.BehaviourTests/bin/Debug/net8.0/DatesAndStuff.BehaviourTests.dll" -t "DatesAndStuff/test/DatesAndStuff.BehaviourTests/bin/Debug/net8.0/TestExecution.json" --output "DatesAndStuff/test/DatesAndStuff.BehaviourTests/bin/Debug/net8.0/LivingDoc.html"
   artifacts:
     when: always
     paths:
