@@ -1,13 +1,33 @@
 stages:
   - build
+  - test
 
 build:
   stage: build
   image: mcr.microsoft.com/dotnet/sdk:8.0
   script:
-    - dotnet restore
-    - dotnet build --no-restore --configuration Release
+    - dotnet restore TestsOnly.sln
+    - dotnet build TestsOnly.sln
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
       - ~/.nuget/packages/
+
+test:
+  stage: test
+  needs:
+    - build
+  image: mcr.microsoft.com/dotnet/sdk:8.0
+  script:
+    - dotnet test TestsOnly.sln --collect:"XPlat Code Coverage"
+    - dotnet tool install -g dotnet-reportgenerator-globaltool
+    - dotnet tool install -g SpecFlow.Plus.LivingDoc.CLI
+    - export PATH="$PATH:/root/.dotnet/tools"
+    - reportgenerator -reports:"**/coverage.cobertura.xml" -targetdir:"coverage-report" -reporttypes:"Html"
+    - livingdoc test-assembly "DatesAndStuff/test/DatesAndStuff.BehaviourTests/bin/Debug/net8.0/DatesAndStuff.BehaviourTests.dll" -t "DatesAndStuff/test/DatesAndStuff.BehaviourTests/bin/Debug/net8.0/TestExecution.json" --output "DatesAndStuff/test/DatesAndStuff.BehaviourTests/bin/Debug/net8.0/LivingDoc.html"
+  artifacts:
+    when: always
+    paths:
+      - coverage-report/
+      - DatesAndStuff/test/DatesAndStuff.BehaviourTests/bin/Debug/net8.0/LivingDoc.html
+    expire_in: 1 week
