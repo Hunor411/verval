@@ -52,7 +52,8 @@ public class SimulationTimeTests
         {
             // Arrange
             var simulationTime = new SimulationTime(2025, 1, 1, 1, 0, 0);
-            var expectedFormat = simulationTime.ToAbsoluteDateTime().ToString("yyyy-MM-ddTHH:mm:ss", CultureInfo.CurrentCulture);
+            var expectedFormat = simulationTime.ToAbsoluteDateTime()
+                .ToString("yyyy-MM-ddTHH:mm:ss", CultureInfo.CurrentCulture);
 
             // Act
             var actualString = simulationTime.ToString();

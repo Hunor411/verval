@@ -57,4 +57,6 @@ internal sealed class TestPaymentService : IPaymentService
         this.specifyCallCount = 0;
         this.confirmCallCount = 0;
     }
+
+    public bool SuccessFul() => this.startCallCount == 1 && this.specifyCallCount == 1 && this.confirmCallCount == 1;
 }

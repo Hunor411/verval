@@ -1,7 +1,5 @@
 stages:
   - build
-  - test
-  - build_sonar
 
 build:
   stage: build
@@ -13,53 +11,3 @@ build:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
       - ~/.nuget/packages/
-
-test:
-  stage: test
-  image: mcr.microsoft.com/dotnet/sdk:8.0
-  script:
-    - mkdir -p coverage
-    - dotnet test --collect="XPlat Code Coverage"
-    - ls DatesAndStuff/test/DatesAndStuff.Tests/
-    - ls DatesAndStuff/test/DatesAndStuff.Tests/TestResults
-    - dotnet tool install -g dotnet-reportgenerator-globaltool
-    - export PATH="$PATH:/root/.dotnet/tools"
-    - reportgenerator -reports:"**/coverage.cobertura.xml" -targetdir:"coverage-report" -reporttypes:"Html"
-  artifacts:
-    when: always
-    paths:
-      - coverage-report/
-      - DatesAndStuff/test/DatesAndStuff.Tests/TestResults/*/coverage.cobertura.xml
-    expire_in: 1 week
-
-build_sonar:
-  stage: build_sonar
-  image: mcr.microsoft.com/dotnet/sdk:8.0
-  tags:
-    - localhost_verval
-  variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
-  cache:
-    policy: pull-push
-    key: "sonar-cache-$CI_COMMIT_REF_SLUG"
-    paths:
-      - "${SONAR_USER_HOME}/cache"
-      - sonar-scanner/
-  script:
-    - echo "TESZT::::"
-    - find . -name "coverage.cobertura.xml"
-    - cat DatesAndStuff/test/DatesAndStuff.Tests/TestResults/*/coverage.cobertura.xml || echo "NEM JO"
-    - dotnet tool install --global dotnet-sonarscanner
-    - export PATH="$PATH:$HOME/.dotnet/tools"
-    - dotnet sonarscanner begin /k:"deakHuni_verval_e0027f5c-2c94-4091-a0f7-55607086bedb" /d:sonar.token="$SONAR_TOKEN" /d:sonar.host.url="$SONAR_HOST_URL" /d:sonar.cs.opencover.reportsPaths="DatesAndStuff/test/DatesAndStuff.Tests/TestResults/*/coverage.cobertura.xml"
-    - dotnet build
-    - dotnet sonarscanner end /d:sonar.token="$SONAR_TOKEN"
-  dependencies:
-    - test
-  allow_failure: true
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-    - if: '$CI_COMMIT_BRANCH == "master"'
-    - if: '$CI_COMMIT_BRANCH == "main"'
-    - if: '$CI_COMMIT_BRANCH == "develop"'

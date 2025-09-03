@@ -8,14 +8,6 @@ public class Person
 {
     public const double SubscriptionFee = 500;
 
-    public bool CanEatChocolate { get; }
-
-    public bool CanEatEgg { get; }
-
-    public bool CanEatGluten { get; }
-
-    public bool CanEatLactose { get; }
-
     private bool married;
 
     public Person(string name, EmploymentInformation employment, IPaymentService paymentService, LocalTaxData taxData,
@@ -31,6 +23,14 @@ public class Person
         this.CanEatEgg = foodPreferenceParams.CanEatEgg;
         this.CanEatChocolate = foodPreferenceParams.CanEatChocolate;
     }
+
+    public bool CanEatChocolate { get; }
+
+    public bool CanEatEgg { get; }
+
+    public bool CanEatGluten { get; }
+
+    public bool CanEatLactose { get; }
 
     public string Name { get; private set; }
 
