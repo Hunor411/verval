@@ -105,7 +105,7 @@ public class PersonPageTests
 
     private ChromeDriver driver;
     private StringBuilder verificationErrors;
-    private static string BaseUrl = "http://localhost:5091";
+    private static readonly string BaseUrl = "http://localhost:5091";
     private Process? blazorProcess;
 
     private const string PersonPageNavigationLocator = "//*[@data-test='PersonPageNavigation']";

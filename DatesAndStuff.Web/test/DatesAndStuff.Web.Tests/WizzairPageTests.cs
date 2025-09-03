@@ -11,10 +11,6 @@ using SeleniumExtras.WaitHelpers;
 [TestFixture]
 public class WizzairPageTests
 {
-    private const string WizzairUrl = "https://wizzair.com";
-    private ChromeDriver driver;
-    private StringBuilder verificationErrors;
-
     [SetUp]
     public void SetupTest()
     {
@@ -42,10 +38,15 @@ public class WizzairPageTests
         Assert.That(this.verificationErrors.ToString(), Is.EqualTo(""));
     }
 
+    private const string WizzairUrl = "https://wizzair.com";
+    private ChromeDriver driver;
+    private StringBuilder verificationErrors;
+
     private const string CookiePolicyButtonLocation = "//*[@id=\"onetrust-accept-btn-handler\"]";
     private const string OneWayInputLocation = "//*[@id=\"radio-button-id-5\"]";
     private const string OriginInputLocation = "//*[@id=\"wa-autocomplete-input-7\"]";
     private const string DestinationInputLocation = "//*[@id=\"wa-autocomplete-input-9\"]";
+
     private const string DateInputLocation =
         "//*[@id=\"app\"]/div/main/div/div/div[1]/div[1]/div[1]/div[2]/div/div[2]/div/div[1]/form/div/fieldset[2]/div/div[1]/div/input";
 
