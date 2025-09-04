@@ -56,7 +56,7 @@ jobs:
         run: dotnet tool install -g SpecFlow.Plus.LivingDoc.CLI
 
       - name: Add dotnet tools to PATH
-        run: echo "$PATH:/root/.dotnet/tools" >> $GITHUB_ENV
+        run: echo "PATH=$PATH:/root/.dotnet/tools" >> $GITHUB_ENV
 
       - name: Generate Coverage Report
         run: reportgenerator -reports:"**/coverage.cobertura.xml" -targetdir:"coverage-report" -reporttypes:"Html"
