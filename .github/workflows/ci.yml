@@ -59,7 +59,7 @@ jobs:
         run: ~/.dotnet/tools/reportgenerator -reports:"**/coverage.cobertura.xml" -targetdir:"coverage-report" -reporttypes:"Html"
 
       - name: Generate Coverage Report
-        run: reportgenerator -reports:"**/coverage.cobertura.xml" -targetdir:"coverage-report" -reporttypes:"Html"
+        run: ~/.dotnet/tools/reportgenerator -reports:"**/coverage.cobertura.xml" -targetdir:"coverage-report" -reporttypes:"Html"
 
       - name: Generate LivingDoc
         run: |
